@@ -4,8 +4,7 @@
 
     <div class="container">  {{--canvas --}}
        <div class="row">
-           <canvas style="width: 100%; text-align: center; display: inline; border: solid #1a202c 5px; margin-top: 5px">
-                ???
+           <canvas id="gameCanvas" style="width: 100%; text-align: center; display: inline; border: solid #1a202c 5px; margin-top: 5px">
            </canvas>
        </div>
         <div class="row" style="margin-top: 10px">
