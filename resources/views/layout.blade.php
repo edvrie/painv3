@@ -73,5 +73,6 @@
 
 
 </body>
+<script src="{{ asset('js/breakout.js') }}" defer></script>
 {{--    <script src="{{ asset('js/scripts.js') }}" defer></script>--}}
 </html>
