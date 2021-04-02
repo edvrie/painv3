@@ -26,5 +26,5 @@ Route::get('register', [\App\Http\Controllers\userController::class, 'registerlo
 Route::get('logout', [\App\Http\Controllers\userController::class, 'logout']);
 Route::post('loginconfirm', [\App\Http\Controllers\userController::class, 'login']);
 Route::post('naujasVartotojas', [\App\Http\Controllers\userController::class, 'registerNew']);
-=======
+
 
