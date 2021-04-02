@@ -27,15 +27,15 @@ class userController extends Controller
 
     public function login(Request $request)
     {
-        $ElPastas = $request->input("pastoAdresas");
-        $Slaptazodis = $request->input("slaptazodis");
+        $ElPastas = $request->input("email");
+        $Slaptazodis = $request->input("password");
 
 
         $data = Users::all()
             ->where("email",$ElPastas)
             ->first();
 
-        print($data);
+
 
         if($data != null) {
             $gautas = $data->password;
@@ -46,10 +46,14 @@ class userController extends Controller
 
                 if($data->isAdmin == 1)
                 {
+                    $data->lastLoggedIn = Carbon::now();
+                    $data->save();
                     die("Redirect to admin");
                 }
                 else
                 {
+                    $data->lastLoggedIn = Carbon::now();
+                    $data->save();
                     return redirect('/')->with('success', 'Sėkmingai prisijungta!');
                 }
 
@@ -64,12 +68,14 @@ class userController extends Controller
 
     public function registerNew(Request $request){
 
-        $ElPastas = $request->input("pastas");
-        $Slaptazodis = $request->input("slaptazodis");
+        $Email = $request->input("email");
+        $Password = $request->input("password");
+        $Username = $request->input("username");
 
         $rules = [
-            'pastas' => 'required|email|max:255',
-            'slaptazodis' => 'required|string|min:5|max:255',
+            'email' => 'required|email|max:255',
+            'password' => 'required|string|min:5|max:255',
+            'username' => 'required|string|min:5|max:255',
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -79,39 +85,25 @@ class userController extends Controller
                 ->withErrors($validator);
         }
 
-        die("Praejo");
+        $AllUsers = Users::all();
 
-        $vartotojai = Vartotojas::all();
-
-        foreach($vartotojai as $pastas)
+        foreach($AllUsers as $user)
         {
-            if($pastas->ElPastas == $ElPastas)
+            if($user->email == $Email)
             {
                 return redirect('register')->with('danger', 'Pašto adresas jau panaudotas!');
             }
         }
 
-//          Vartotojas
-        $vartotojas = new Vartotojas();
-        $pirkejas = new Pirkejas();
-        $krepselis = new Krepselis();
 
-        $vartotojas->ElPastas = $ElPastas;
-        $vartotojas->Slaptazodis = $Slaptazodis;
-        $vartotojas->SukurimoData = Carbon::now();
-        $vartotojas->Tipas = 3;
-        $vartotojas->save();
-        $vartotojoID = $vartotojas->id_Vartotojas;
+        $User = new Users();
 
-        $pirkejas->fk_Vartotojasid_Vartotojas = $vartotojoID;
-        $pirkejas->NaujienlaiskioPrenumerata = 0;
-        $pirkejas->save();
-        $pirkejoID = $pirkejas->id_Pirkejas;
-
-        $krepselis->fk_Pirkejasid_Pirkejas = $pirkejoID;
-        $krepselis->save();
-
-
+        $User->email = $Email;
+        $User->password = $Password;
+        $User->username = $Username;
+        $User->isAdmin = 0;
+        $User->creationDate = Carbon::now();
+        $User->save();
 
         return redirect('/')->with('success', 'Sėkmingai priregistruota!');
     }
