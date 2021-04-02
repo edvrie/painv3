@@ -18,7 +18,7 @@
 
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-    <a class="navbar-brand" href="#">Logo</a>
+    <a class="navbar-brand" href="{{ url('/') }}">Logo</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -38,20 +38,35 @@
                 </div>
             </li>
         </ul>
+        @if (session()->get('id') == null)
         <ul class="nav navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" href="#"><span class="fas fa-user"></span> Sign Up</a>
+                <a class="nav-link" href="{{ url('/register') }}"><span class="fas fa-user"></span> Sign Up</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#"><span class="fas fa-sign-in-alt"></span> Login</a>
+                <a class="nav-link" href="{{ url('/login') }}"><span class="fas fa-sign-in-alt"></span> Login</a>
             </li>
         </ul>
+        @else
+        <ul class="nav navbar-nav ml-auto">
+            <li>
+                <a class="nav-link" href="{{ url('/logout') }}"><span class="fas fa-user"></span> Logout</a>
+            </li>
+        </ul>
+        @endif
     </div>
 </nav>
 
-{{--<nav class="navbar navbar-expand-lg navbar-dark bg-dark">--}}
-{{--    <a class="navbar-brand" href="#">Haha</a>--}}
-{{--</nav>--}}
+@if (session('success'))
+    <div class="alert alert-success">
+        <h3>{{session('success')}}</h3>
+    </div>
+@endif
+@if (session('danger'))
+    <div class="alert alert-danger">
+        <h3>{{session('danger')}}</h3>
+    </div>
+@endif
 
 @yield('content')
 
