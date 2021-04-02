@@ -1,9 +1,15 @@
-/* viršutinė puslapio dalis */
-#headermain1 {
-    width: 100%;
-    height: 20vw;
-    float: left;
-    pointer-events: none;
+
+.logindiv {
+
+    width:500px;
+    margin: 0 auto;
+    display:table;
+    font-size: 20px;
+    text-align: center;
+
+    border-style: solid;
+    border-width: 5px;
+    border-radius: 20px;
 }
 
 body {

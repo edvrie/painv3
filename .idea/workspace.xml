@@ -7,7 +7,7 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ComposerSettings" synchronizationState="SYNCHRONIZE">
+  <component name="ComposerSettings" doNotAsk="true" synchronizationState="SYNCHRONIZE">
     <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
     <execution />
   </component>
@@ -142,6 +142,11 @@
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\xampp\htdocs\IITProjektas\resources\views\userViews" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="phpunit.xml" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
       <TestRunner scope="XML" />
@@ -156,7 +161,10 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1612961215399</updated>
-      <workItem from="1612961216930" duration="4306000" />
+      <workItem from="1612961216930" duration="5504000" />
+      <workItem from="1614346406342" duration="4000" />
+      <workItem from="1614346419894" duration="708000" />
+      <workItem from="1617374378010" duration="10632000" />
     </task>
     <servers />
   </component>
@@ -168,9 +176,17 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="288" y="325" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1612961590139" />
+    <state x="690" y="275" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1617387366685">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="690" y="275" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1617387366685" />
     <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1612961325618">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1612961325618" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1617386227640">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1617386227640" />
   </component>
 </project>
