@@ -23,7 +23,7 @@
                 </tr>
                 <tr>
                     <td><h3>Password:</h3></td>
-                    <td><input type="text" name="password" value=""></td>
+                    <td><input type="password" name="password" value=""></td>
                 </tr>
                 <tr>
                     <th colspan="2"><p class="text-danger">{{ $errors->first('password') }}</p></th>

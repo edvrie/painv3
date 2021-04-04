@@ -6,6 +6,7 @@ use App\Models\Users;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
+use function PHPUnit\Framework\isEmpty;
 
 class userController extends Controller
 {
@@ -22,7 +23,7 @@ class userController extends Controller
     public function logout(Request $request){
         session()->forget('id');
         session()->forget('admin');
-        return redirect('/')->with('success', 'Sėkmingai atsijungta!');
+        return redirect('/')->with('success', 'Successfully logged out!');
     }
 
     public function login(Request $request)
@@ -54,15 +55,15 @@ class userController extends Controller
                 {
                     $data->lastLoggedIn = Carbon::now();
                     $data->save();
-                    return redirect('/')->with('success', 'Sėkmingai prisijungta!');
+                    return redirect('/')->with('success', 'Successfully logged in!');
                 }
 
             } else {
-                return redirect('login')->with('danger', 'Neteisingi prisijungimo duomenys!');
+                return redirect('login')->with('danger', 'Wrong login information!');
             }
         }
         else {
-            return redirect('login')->with('danger', 'Neteisingi prisijungimo duomenys!');
+            return redirect('login')->with('danger', 'Wrong login information!');
         }
     }
 
@@ -91,7 +92,7 @@ class userController extends Controller
         {
             if($user->email == $Email)
             {
-                return redirect('register')->with('danger', 'Pašto adresas jau panaudotas!');
+                return redirect('register')->with('danger', 'Email address is already in use!');
             }
         }
 
@@ -105,7 +106,83 @@ class userController extends Controller
         $User->creationDate = Carbon::now();
         $User->save();
 
-        return redirect('/')->with('success', 'Sėkmingai priregistruota!');
+        return redirect('/')->with('success', 'Successfully registered!');
     }
 
+    public function settingsLoad()
+    {
+        $ident = session()->get('id');
+
+        $data = Users::all()
+            ->where("id_USERS",$ident)
+            ->first();
+
+        return view('userViews/settings',compact(array('data')));
+    }
+
+    public function changeSettings(Request $request)
+    {
+        $ident = session()->get('id');
+
+        $Username = $request->input("username");
+        $Nickname = $request->input("nickname");
+        $Email = $request->input("email");
+        $Password = $request->input("password");
+
+
+        $AllUsers = Users::all();
+        foreach($AllUsers as $user)
+        {
+            if($user->nickname == $Nickname and $user->id_USERS != $ident)
+            {
+                return redirect('settings')->with('danger', 'Nickname is already in use!');
+            }
+
+            if($user->email == $Email and $user->id_USERS != $ident)
+            {
+                return redirect('settings')->with('danger', 'Email address is already in use!');
+            }
+        }
+
+        $rules = [
+            'username' => 'required|string|min:5|max:255',
+            'email' => 'required|email|min:5|max:255',
+            'password' => 'required|string|min:5|max:255',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return redirect('settings')
+                ->withInput()
+                ->withErrors($validator);
+        }
+
+
+        $User = Users::all()
+            ->where("id_USERS",$ident)
+            ->first();
+
+
+        $User->email = $Email;
+        $User->password = $Password;
+        $User->username = $Username;
+        $User->nickname = $Nickname;
+        $User->save();
+
+        return redirect('settings')->with('success', 'Successfully changed information!');
+    }
+
+    public function resetNickname()
+    {
+        $ident = session()->get('id');
+
+        $User = Users::all()
+            ->where("id_USERS",$ident)
+            ->first();
+
+        $User->nickname = null;
+        $User->save();
+
+        return redirect('settings')->with('success', 'Successfully reset Nickname!');
+    }
 }

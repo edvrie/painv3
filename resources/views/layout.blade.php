@@ -50,7 +50,10 @@
         @else
         <ul class="nav navbar-nav ml-auto">
             <li>
-                <a class="nav-link" href="{{ url('/logout') }}"><span class="fas fa-user"></span> Logout</a>
+                <a class="nav-link" href="{{ url('/settings') }}"><span class="fa fa-cog"></span> Settings</a>
+            </li>
+            <li>
+                <a class="nav-link" href="{{ url('/logout') }}"><span class="fas fa-sign-out-alt"></span> Logout</a>
             </li>
         </ul>
         @endif
