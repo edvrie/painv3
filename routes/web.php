@@ -24,7 +24,8 @@ Route::get('/gameView', function (){
 Route::get('login', [\App\Http\Controllers\userController::class, 'loginload']);
 Route::get('register', [\App\Http\Controllers\userController::class, 'registerload']);
 Route::get('logout', [\App\Http\Controllers\userController::class, 'logout']);
+Route::get('settings', [\App\Http\Controllers\userController::class, 'settingsLoad']);
 Route::post('loginconfirm', [\App\Http\Controllers\userController::class, 'login']);
 Route::post('naujasVartotojas', [\App\Http\Controllers\userController::class, 'registerNew']);
-
-
+Route::post('changeSettings', [\App\Http\Controllers\userController::class, 'changeSettings']);
+Route::post('resetNickname', [\App\Http\Controllers\userController::class, 'resetNickname']);
