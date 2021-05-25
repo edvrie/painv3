@@ -7,10 +7,10 @@
         <div class="card-deck">
             <button class="card bg-primary" onclick="location.href='{{url('gameView')}}'">
                 <div class="card-body text-center">
-                    <p class="card-text">Some text inside the first card</p>
+                    <p class="card-text">Breakout</p>
                 </div>
             </button>
-            <button class="card bg-warning">
+            <button class="card bg-warning" onclick="location.href='{{url('gameView')}}'">
                 <div class="card-body text-center">
                     <p class="card-text">Some text inside the second card</p>
                 </div>
