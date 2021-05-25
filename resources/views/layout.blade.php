@@ -37,6 +37,18 @@
                     <a class="dropdown-item" href="#">Something else here</a>
                 </div>
             </li>
+            @if (session()->get('admin') == 1)
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Admin Functions
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{{ url('/deleteUser') }}">Delete Users</a>
+                    <a class="dropdown-item" href="#">Delete Scores</a>
+                    <a class="dropdown-item" href="#">Change Game Descriptions</a>
+                </div>
+            </li>
+            @endif
         </ul>
         @if (session()->get('id') == null)
         <ul class="nav navbar-nav ml-auto">

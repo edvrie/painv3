@@ -20,6 +20,7 @@ Route::get('/gameView', function (){
     return view('gameView');
 });
 
+Route::get('deleteUser', [\App\Http\Controllers\userController::class, 'userDeleteload']);
 
 Route::get('login', [\App\Http\Controllers\userController::class, 'loginload']);
 Route::get('register', [\App\Http\Controllers\userController::class, 'registerload']);
@@ -29,3 +30,5 @@ Route::post('loginconfirm', [\App\Http\Controllers\userController::class, 'login
 Route::post('naujasVartotojas', [\App\Http\Controllers\userController::class, 'registerNew']);
 Route::post('changeSettings', [\App\Http\Controllers\userController::class, 'changeSettings']);
 Route::post('resetNickname', [\App\Http\Controllers\userController::class, 'resetNickname']);
+
+Route::post('deleteSelectedUser', [\App\Http\Controllers\userController::class, 'userDelete']);
