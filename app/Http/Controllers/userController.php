@@ -2,14 +2,44 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Review;
 use App\Models\Users;
+use App\Models\Scores;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use function PHPUnit\Framework\isEmpty;
+use Illuminate\Support\Facades\Hash;
 
 class userController extends Controller
 {
+    public function userDeleteload()
+    {
+        if(session()->get('admin')!=1)
+        {
+            return redirect('/')->with('danger', 'Trying to access an ADMIN function!');
+        }
+
+        $data = Users::all() -> where("isAdmin",0);
+
+        return view('userViews/userDelete',compact(array('data')));
+    }
+
+    public function userDelete(Request $request)
+    {
+        if(session()->get('admin')!=1)
+        {
+            return redirect('/')->with('danger', 'Trying to access an ADMIN page!');
+        }
+
+        $id = $request->input('id');
+        Review::where('fk_USERSid_USERS','=',$id)->delete();
+        Scores::where('fk_USERSid_USERS','=',$id)->delete();
+        Users::where('id_USERS','=',$id)->delete();
+
+        return redirect('/deleteUser')->with('success', 'Successfully deleted user');
+    }
+
     public function loginload()
     {
         return view('userViews/login');
@@ -31,17 +61,17 @@ class userController extends Controller
         $ElPastas = $request->input("email");
         $Slaptazodis = $request->input("password");
 
+        print("Pateko1");
 
         $data = Users::all()
             ->where("email",$ElPastas)
             ->first();
 
-
-
         if($data != null) {
             $gautas = $data->password;
 
-            if ($gautas == $Slaptazodis) {
+
+            if (Hash::check($Slaptazodis, $gautas)) {
                 session(['id'=>$data->id_USERS]);
                 session(['admin'=>$data->isAdmin]);
 
@@ -49,7 +79,7 @@ class userController extends Controller
                 {
                     $data->lastLoggedIn = Carbon::now();
                     $data->save();
-                    die("Redirect to admin");
+                    return redirect('/')->with('success', 'Successfully logged in as ADMIN!');
                 }
                 else
                 {
@@ -70,8 +100,10 @@ class userController extends Controller
     public function registerNew(Request $request){
 
         $Email = $request->input("email");
-        $Password = $request->input("password");
+        $UnhashedPassword = $request->input("password");
         $Username = $request->input("username");
+
+        $Password = Hash::make($UnhashedPassword);
 
         $rules = [
             'email' => 'required|email|max:255',
@@ -96,6 +128,13 @@ class userController extends Controller
             }
         }
 
+        foreach($AllUsers as $user)
+        {
+            if($user->username == $Username)
+            {
+                return redirect('register')->with('danger', 'Username is already in use!');
+            }
+        }
 
         $User = new Users();
 
@@ -133,7 +172,7 @@ class userController extends Controller
         $AllUsers = Users::all();
         foreach($AllUsers as $user)
         {
-            if($user->nickname == $Nickname and $user->id_USERS != $ident)
+            if($user->nickname == $Nickname and $user->id_USERS != $ident or $user->username == $Nickname and $user->id_USERS != $ident)
             {
                 return redirect('settings')->with('danger', 'Nickname is already in use!');
             }
