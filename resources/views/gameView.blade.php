@@ -2,6 +2,12 @@
 
 @section('content')
 
+    <script>
+        let myCoolCode = document.createElement("script");
+        myCoolCode.setAttribute("src", "{{ $data -> name }}");
+        document.body.appendChild(myCoolCode);
+    </script>
+
     <div class="container">  {{--canvas --}}
        <div class="row">
            <canvas id="gameCanvas1" style="width: 100%; text-align: center; display: inline; border: solid #1a202c 5px; margin-top: 5px">
