@@ -12,12 +12,12 @@
             </button>
             <button class="card bg-warning" onclick="location.href='{{url('gameView')}}'">
                 <div class="card-body text-center">
-                    <p class="card-text">Some text inside the second card</p>
+                    <p class="card-text">Pong</p>
                 </div>
             </button>
-            <button class="card bg-success">
+            <button class="card bg-success" onclick="location.href='{{url('gameView')}}'">
                 <div class="card-body text-center">
-                    <p class="card-text">Some text inside the third card</p>
+                    <p class="card-text">Clicker</p>
                 </div>
             </button>
             <button class="card bg-danger">

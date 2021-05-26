@@ -90,6 +90,7 @@
 
 </body>
 {{--<script src="{{ asset('js/breakout.js') }}" defer></script>--}}
-<script src="{{ asset('js/pong.js') }}" defer></script>
+{{--<script src="{{ asset('js/pong.js') }}" defer></script>--}}
+<script src="{{ asset('js/clicker.js') }}" defer></script>
 {{--    <script src="{{ asset('js/scripts.js') }}" defer></script>--}}
 </html>
