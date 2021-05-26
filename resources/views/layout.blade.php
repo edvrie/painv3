@@ -44,7 +44,8 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="{{ url('/deleteUser') }}">Delete Users</a>
-                    <a class="dropdown-item" href="#">Delete Scores</a>
+                    <a class="dropdown-item" href="{{ url('/deleteReview') }}">Delete Reviews</a>
+                    <a class="dropdown-item" href="{{ url('/deleteScore') }}">Delete Scores</a>
                     <a class="dropdown-item" href="#">Change Game Descriptions</a>
                 </div>
             </li>
