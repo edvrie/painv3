@@ -187,7 +187,13 @@ function ballCollision(){
                 else if (p1DownPressed){
                     bdy = Math.cos(bdy)
                 }
-                bdx = -bdx+0.2;
+                if(Math.abs(bdx) < 2){
+                    bdx = -bdx+0.1;
+                }
+                else{
+                    bdx = -bdx;
+                }
+
             }
         }
     }
@@ -202,28 +208,33 @@ function ballCollision(){
                 else if (p2DownPressed){
                     bdy = Math.cos(bdy)
                 }
-                bdx = -bdx-0.2;
+                if (Math.abs(bdx) < 2)
+                {
+                    bdx = -bdx-0.1;
+                }
+                else{
+                    bdx = -bdx;
+                }
+
             }
         }
     }
 }
 
 function RestartGame(){
+    firstPaddleY = (canvas.height - paddleLength) / 2;
+    secondPaddleY = (canvas.height - paddleLength) / 2;
+    x = canvas.width/2;
+    y = canvas.height/2;
     if (p1Score > p2Score){
-        x = canvas.width/2;
-        y = canvas.height/2;
         bdx = 1;
         bdy = 0;
     }
     else if (p1Score < p2Score){
-        x = canvas.width/2;
-        y = canvas.height/2;
         bdx = -1;
         bdy = 0;
     }
     else{
-        x = canvas.width/2;
-        y = canvas.height/2;
         bdx = -1;
         bdy = 0;
     }
