@@ -22,7 +22,7 @@
                 <form method="post" action="{{url('deleteSelectedUser')}}">
                     @csrf
                     <input type="hidden" class="editInput" stype="string" name="id" value="{{ $duomenys -> id_USERS }}" readonly>
-                    <td><input type="submit" onclick="return myFunction({{ $duomenys }})" name="deletUser" value="Pašalinti"></td>
+                    <td><input type="submit" onclick="return myFunction({{ $duomenys }})" name="deletUser" value="Delete"></td>
                 </form>
             </tr>
             @endforeach
