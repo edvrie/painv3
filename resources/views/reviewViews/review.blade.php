@@ -30,7 +30,6 @@
     <script>
         function myFunction(duomuo) {
             return confirm("Are You Sure to delete \"" + duomuo.userName + "\"");
-
         }
     </script>
 @endsection

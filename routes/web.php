@@ -16,9 +16,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('index');
 });
-Route::get('/gameView', function (){
+
+Route::get('/gameView', function () {
     return view('gameView');
 });
+
+Route::get('gameView/{id}', [\App\Http\Controllers\gameController::class, 'gameViewLoad']);
 
 Route::get('deleteReview', [\App\Http\Controllers\reviewController::class, 'reviewDeleteLoad']);
 Route::get('deleteUser', [\App\Http\Controllers\userController::class, 'userDeleteload']);

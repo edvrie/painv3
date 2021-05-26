@@ -5,17 +5,17 @@
 
     <div class="container mt-3">
         <div class="card-deck">
-            <button class="card bg-primary" onclick="location.href='{{url('gameView')}}'">
+            <button class="card bg-primary" onclick="location.href='{{url('gameView/breakout')}}'">
                 <div class="card-body text-center">
                     <p class="card-text">Breakout</p>
                 </div>
             </button>
-            <button class="card bg-warning" onclick="location.href='{{url('gameView')}}'">
+            <button class="card bg-warning" onclick="location.href='{{url('gameView/pong')}}'">
                 <div class="card-body text-center">
                     <p class="card-text">Pong</p>
                 </div>
             </button>
-            <button class="card bg-success" onclick="location.href='{{url('gameView')}}'">
+            <button class="card bg-success" onclick="location.href='{{url('gameView/clicker')}}'">
                 <div class="card-body text-center">
                     <p class="card-text">Clicker</p>
                 </div>
@@ -28,6 +28,6 @@
         </div>
     </div>
 
-@endsection
 
+@endsection
 
