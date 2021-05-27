@@ -28,6 +28,7 @@ class gameController extends Controller
         $AllGameReviews = Review::all() -> where("fk_GAMEid_GAME",$gameid);
         $sum = 0;
         $kel = 0;
+
         foreach($AllGameReviews as $rew)
         {
             if($rew -> rating != "")
@@ -36,7 +37,13 @@ class gameController extends Controller
                 $kel = $kel + 1;
             }
         }
-        $sum = floor($sum / $kel);
+        if($kel != 0)
+        {
+            $sum = floor($sum / $kel);
+        }
+        else{
+            $sum = 0;
+        }
         $Zaidimas->rating = $sum;
         $Zaidimas->save();
 
