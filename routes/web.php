@@ -16,10 +16,16 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('index');
 });
-Route::get('/gameView', function (){
+
+Route::get('/gameView', function () {
     return view('gameView');
 });
 
+Route::get('gameView/{id}', [\App\Http\Controllers\gameController::class, 'gameViewLoad']);
+
+Route::get('deleteReview', [\App\Http\Controllers\reviewController::class, 'reviewDeleteLoad']);
+Route::get('deleteUser', [\App\Http\Controllers\userController::class, 'userDeleteload']);
+Route::get('deleteScore', [\App\Http\Controllers\scoreController::class, 'scoreDeleteload']);
 
 Route::get('login', [\App\Http\Controllers\userController::class, 'loginload']);
 Route::get('register', [\App\Http\Controllers\userController::class, 'registerload']);
@@ -29,3 +35,7 @@ Route::post('loginconfirm', [\App\Http\Controllers\userController::class, 'login
 Route::post('naujasVartotojas', [\App\Http\Controllers\userController::class, 'registerNew']);
 Route::post('changeSettings', [\App\Http\Controllers\userController::class, 'changeSettings']);
 Route::post('resetNickname', [\App\Http\Controllers\userController::class, 'resetNickname']);
+
+Route::post('deleteSelectedUser', [\App\Http\Controllers\userController::class, 'userDelete']);
+Route::post('deleteSelectedReview', [\App\Http\Controllers\reviewController::class, 'reviewDelete']);
+Route::post('deleteSelectedScore', [\App\Http\Controllers\scoreController::class, 'scoreDelete']);

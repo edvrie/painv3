@@ -1,22 +1,24 @@
 var canvas = document.getElementById("gameCanvas");
 var context = canvas.getContext("2d");
 
+let gameOver = false;
+
 var x = canvas.width/2;
 var y = canvas.height-30;
-var bdx = 1;
+var bdx = 0;
 var bdy = -1;
 
 var ballRadius = 3;
 
 var paddleHeight = 5;
-var paddleWidth = 50;
+var paddleWidth = 60;
 var paddleX = (canvas.width-paddleWidth) / 2;
 var rightPressed = false;
 var leftPressed = false;
 var pdx = 4;
 
-var brickRowCount = 3;
-var brickColumnCount = 5;
+let brickRowCount = 2;//var brickRowCount = 3;
+let brickColumnCount = 2;//var brickColumnCount = 5;
 var brickWidth = 30;
 var brickHeight = 5;
 var brickPadding = 2;
@@ -58,7 +60,7 @@ function collisionDetection() {
     for(var c=0; c<brickColumnCount; c++) {
         for(var r=0; r<brickRowCount; r++) {
             var b = bricks[c][r];
-            if(x > b.x && x < b.x+brickWidth && y > b.y && y < b.y+brickHeight) {
+            if(x + bdx > b.x - ballRadius && x + bdx < b.x+brickWidth + ballRadius && y + bdy > b.y - ballRadius && y + bdy < b.y+brickHeight + ballRadius && b.status !== 0) {
                 bdy = -bdy;
                 b.status = 0;
                 score++;
@@ -70,7 +72,10 @@ function collisionDetection() {
 function drawScore() {
     context.font = "16px Arial";
     context.fillStyle = "#0095DD";
-    context.fillText("Score: "+score, 8, 20);
+    context.fillText("bdy: "+bdy, 8, 20);
+    context.fillText("bdx: "+bdx, 8, 40);
+    context.fillText("x: "+x, 8, 60);
+    context.fillText("y: "+y, 8, 80);
 }
 
 function drawBall(){
@@ -89,7 +94,21 @@ function drawPaddle(){
     context.closePath();
 }
 
+function checkIfGameOver(){
+    let found = false;
+    for(var c=0; c<brickColumnCount; c++) {
+        for(var r=0; r<brickRowCount; r++) {
+            var b = bricks[c][r];
+            if (b.status == 1){
+                found = true;
+            }
+            }
+        }
+    return found;
+}
+
 function drawBricks() {
+    let count = 0;
     for(var c=0; c<brickColumnCount; c++) {
         for(var r=0; r<brickRowCount; r++) {
             if (bricks[c][r].status == 1) {
@@ -102,33 +121,69 @@ function drawBricks() {
                 context.fillStyle = "#0095DD";
                 context.fill();
                 context.closePath();
+                count++;
             }
         }
     }
+    if (count === 0){
+        gameOver = true;
+    }
 }
+
 
 function draw(){
     context.clearRect(0, 0, canvas.width, canvas.height);
-    drawBall();
     drawPaddle();
-    collisionDetection();
+    drawBall();
     drawBricks();
+    collisionDetection();
     drawScore();
-    if(x + bdx > canvas.width-ballRadius || x + bdx < ballRadius) {
+    if (gameOver){
+        alert("You Win!");
+        clearInterval(interval);
+        context.clearRect(0, 0, canvas.width, canvas.height);
+    }
+    if(x + bdx > canvas.width-ballRadius || x < ballRadius) {
         bdx = -bdx;
     }
     if(y + bdy < ballRadius) {
         bdy = -bdy;
-    } else if(y + bdy > canvas.height-ballRadius) {
-        if(x > paddleX && x < paddleX + paddleWidth) {
-            bdy = -bdy;
-        }
-        else {
+    }
+    if(bdy > 0) {
+        if (x > paddleX - ballRadius && x < paddleX + paddleWidth + ballRadius) {
+            // jei yra tarp paddle
+            if (y + bdy > canvas.height - paddleHeight - ballRadius) {
+                if (leftPressed) {
+                    if (bdx > -pdx){
+                        bdx = bdx - 1;
+                        bdy = -1*bdy;
+                    }
+                    else {
+                        bdy = -bdy;
+                    }
+                }
+                else if (rightPressed) {
+                    if (bdx < pdx){
+                        bdx = bdx + 1;
+                        bdy = -1*bdy;
+                    }
+                    else{
+                        bdy = -bdy;
+                    }
+                } else {
+                    bdx = -bdx;
+                    bdy = -1*bdy;
+                }
+
+            }
+        } else if (y > canvas.height) {
             alert("GAME OVER");
-            document.location.reload();
             clearInterval(interval);
+            document.location.reload();
         }
     }
+
+
     if(rightPressed) {
         paddleX += pdx;
         if (paddleX + paddleWidth > canvas.width){
@@ -141,10 +196,11 @@ function draw(){
             paddleX = 0;
         }
     }
+
     x+=bdx;
     y+=bdy;
 }
 
 
 
-var interval = setInterval(draw, 50);
+var interval = setInterval(draw, 10);
