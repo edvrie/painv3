@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Game;
 use App\Models\Review;
+use App\Models\Scores;
 use App\Models\User;
 use App\Models\Users;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use function PHPUnit\Framework\isEmpty;
 
 class reviewController extends Controller
 {
@@ -44,5 +47,47 @@ class reviewController extends Controller
         Review::where('id_REVIEW','=',$ID)->delete();
 
         return redirect('/deleteReview')->with('success', 'Successfully deleted review');
+    }
+
+    public function leaveUserReview(Request $request)
+    {
+        $userID = session()->get('id');
+        $gameID = $request->input("gameId");
+        $Ivertinimas = $request->input("star");
+        $Tekstas = $request->input("review");
+        print($Ivertinimas);
+        print($Tekstas);
+
+        $review = Review::all() -> where("fk_GAMEid_GAME",$gameID) -> where("fk_USERSid_USERS",$userID) -> first();
+        print($review);
+        if($review == null)
+        {
+            if($Ivertinimas == "" && $Tekstas == "") {
+                return redirect()->back();
+            }
+            else{
+                $Review = new Review();
+                $Review->rating = $Ivertinimas;
+                $Review->description = $Tekstas;
+                $Review->fk_USERSid_USERS = $userID;
+                $Review->fk_GAMEid_GAME = $gameID;
+                $Review->save();
+            }
+        }
+        else {
+            if($Ivertinimas != "")
+            {
+                $review->rating = $Ivertinimas;
+            }
+            if($Tekstas != "")
+            {
+                $review->description = $Tekstas;
+            }
+            $review->fk_USERSid_USERS = $userID;
+            $review->fk_GAMEid_GAME = $gameID;
+            $review->save();
+        }
+
+        return redirect()->back();
     }
 }
