@@ -27,7 +27,7 @@
                     @csrf
                     <td style="margin:0;padding:0"><input class="editInput" stype="string" name="username" value="{{ $data -> username }}"></td>
                     <td style="padding:0"><input class="editInput" stype="string" name="nickname" value="{{ $data -> nickname }}"></td>
-                    <td style="padding:0"><input class="editInput" stype="string" name="password" value="{{ $data -> password }}"></td>
+                    <td style="padding:0"><input class="editInput" stype="string" type="password"  name="password" value=""></td>
                     <td style="padding:0"><input class="editInput" stype="string" name="email" value="{{ $data -> email }}"></td>
                     <td style="padding:0"> <input type="submit" name="addPreke" value="Change"></td>
                 </form>

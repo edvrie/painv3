@@ -166,15 +166,19 @@ class userController extends Controller
         $Username = $request->input("username");
         $Nickname = $request->input("nickname");
         $Email = $request->input("email");
-        $Password = $request->input("password");
+        $pass = $request->input("password");
+        $Password = Hash::make($pass);
 
 
         $AllUsers = Users::all();
         foreach($AllUsers as $user)
         {
-            if($user->nickname == $Nickname and $user->id_USERS != $ident or $user->username == $Nickname and $user->id_USERS != $ident)
+            if($user->nickname != "")
             {
-                return redirect('settings')->with('danger', 'Nickname is already in use!');
+                if($user->nickname == $Nickname and $user->id_USERS != $ident or $user->username == $Nickname and $user->id_USERS != $ident)
+                {
+                    return redirect('settings')->with('danger', 'Nickname is already in use!');
+                }
             }
 
             if($user->email == $Email and $user->id_USERS != $ident)
@@ -186,7 +190,6 @@ class userController extends Controller
         $rules = [
             'username' => 'required|string|min:5|max:255',
             'email' => 'required|email|min:5|max:255',
-            'password' => 'required|string|min:5|max:255',
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -203,7 +206,10 @@ class userController extends Controller
 
 
         $User->email = $Email;
-        $User->password = $Password;
+        if($pass != "")
+        {
+            $User->password = $Password;
+        }
         $User->username = $Username;
         $User->nickname = $Nickname;
         $User->save();
