@@ -1,4 +1,4 @@
-var canvas = document.getElementById("gameCanvas");
+var canvas = document.getElementById("gameCanvas1");
 var context = canvas.getContext("2d");
 
 let gameOver = false;
