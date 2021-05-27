@@ -39,3 +39,4 @@ Route::post('resetNickname', [\App\Http\Controllers\userController::class, 'rese
 Route::post('deleteSelectedUser', [\App\Http\Controllers\userController::class, 'userDelete']);
 Route::post('deleteSelectedReview', [\App\Http\Controllers\reviewController::class, 'reviewDelete']);
 Route::post('deleteSelectedScore', [\App\Http\Controllers\scoreController::class, 'scoreDelete']);
+Route::post('leaveReview', [\App\Http\Controllers\reviewController::class, 'leaveUserReview']);

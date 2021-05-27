@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Game;
+use App\Models\Review;
 use App\Models\Scores;
 use App\Models\User;
 use App\Models\Users;
@@ -20,14 +21,29 @@ class gameController extends Controller
 
         $gameid= $data -> id_GAME;
         $scores = Scores::all() -> where("fk_GAMEid_GAME",$gameid);
-//        print($data);
-//        print($scores);
+        $comments = Review::all() -> where("fk_GAMEid_GAME",$gameid);
+
+        // RATING APSKAICIAVIMAS
+        $Zaidimas = Game::all() -> where("id_GAME",$gameid)->first();
+        $AllGameReviews = Review::all() -> where("fk_GAMEid_GAME",$gameid);
+        $sum = 0;
+        $kel = 0;
+        foreach($AllGameReviews as $rew)
+        {
+            if($rew -> rating != "")
+            {
+                $sum = $sum + $rew -> rating;
+                $kel = $kel + 1;
+            }
+        }
+        $sum = floor($sum / $kel);
+        $Zaidimas->rating = $sum;
+        $Zaidimas->save();
 
         foreach($scores as $score)
         {
             $userID = $score -> fk_USERSid_USERS;
             $userInfo = User::all() -> where("id_USERS",$userID) ->first();
-
             $nickname = $userInfo -> nickname;
             $username = $userInfo -> username;
 
@@ -40,6 +56,23 @@ class gameController extends Controller
                 $score -> userName = $nickname;
             }
         }
-        return view('gameView',compact(array('data','scores')));
+
+        foreach($comments as $comment)
+        {
+            $userID = $comment -> fk_USERSid_USERS;
+            $userInfo = User::all() -> where("id_USERS",$userID) ->first();
+            $nickname = $userInfo -> nickname;
+            $username = $userInfo -> username;
+
+            if($nickname == "")
+            {
+                $comment -> userName = $username;
+            }
+            else
+            {
+                $comment -> userName = $nickname;
+            }
+        }
+        return view('gameView',compact(array('data','scores','comments')));
     }
 }
