@@ -21,7 +21,7 @@
                 </div>
             </button>
             <button class="card bg-danger">
-                <div class="card-body text-center">
+                <div class="card-body text-center" onclick="location.href='{{url('gameView/jumper')}}'">
                     <p class="card-text">Some text inside the fourth card</p>
                 </div>
             </button>
