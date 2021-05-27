@@ -76,7 +76,7 @@ function drawScore() {
 function drawBall(){
     context.beginPath();
     context.arc(x, y, ballRadius, 0, Math.PI*2);
-    context.fillStyle = "#0095DD";
+    context.fillStyle = "#0095DD";git
     context.fill();
     context.closePath();
 }
