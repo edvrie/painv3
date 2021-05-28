@@ -8,6 +8,7 @@ let gridOffsetX = 20;//25
 let gridMarginX = 5;
 let gridX = canvas.width/3;
 let gridY = canvas.height/3;
+let tempGridY = gridY;
 
 let platformWidth = 60;
 let platformHeight = 10;
@@ -26,6 +27,7 @@ let rightPressed = false;
 let upPressed = false;
 
 let animationInterval;
+let gameInterval;
 
 
 document.addEventListener("keydown", keyDownHandler, false);
@@ -33,7 +35,6 @@ document.addEventListener("keyup", keyUpHandler, false);
 
 function keyDownHandler(e) {
     if((e.key === "Right" || e.key === "ArrowRight") && rightPressed !== true && gameStarted) {
-        e.preventDefault();
         moveObjectRight();
         rightPressed = true;
     }
@@ -117,7 +118,18 @@ function moveAnimationLeft(){
     else{
         cancelAnimationFrame(moveAnimationLeft);
     }
+    //dropObject();
 }
+//
+// function dropObject(){
+//     if (objectPos.y < canvas.height - platformHeight - objectSize) {
+//         objectPos.y += 5;
+//         requestAnimationFrame(dropObject);
+//     }
+//     else{
+//         cancelAnimationFrame(dropObject);
+//     }
+// }
 
 function moveAnimationRight(){
     if (objectPos.x < tempPosX){
@@ -130,12 +142,17 @@ function moveAnimationRight(){
     else{
         cancelAnimationFrame(moveAnimationRight)
     }
+    //moveObjectDown();
 }
 
-function movePlatformsDown(){
-    let tempGridY = gridY;
+// function moveObjectDown(){
+//     if (objectPos.y < canvas.height - platformHeight - objectSize){
+//         objectPos.y += 5;
+//     }
+//     requestAnimationFrame(moveObjectDown);
+// }
 
-}
+
 
 function drawObject(){
     context.beginPath();
@@ -166,10 +183,19 @@ function loop(){
     context.clearRect(0, 0, canvas.width, canvas.height);
     drawInnitPlatforms();
     drawObject();
+    if (objectPos.y === canvas.height - platformHeight - gridY - objectSize){
+        while (objectPos.y < canvas.height - platformHeight - objectSize){
+            objectPos.y += 1;
+            gridY -= 1;
+        }
+        gridY = tempGridY;
+    }
+
+
 
 }
 
 function startGame(){
     gameStarted = true;
-    animationInterval = setInterval(loop, gameTimer);
+    gameInterval = setInterval(loop, gameTimer);
 }
