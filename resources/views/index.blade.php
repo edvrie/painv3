@@ -6,7 +6,7 @@
     <div class="container mt-3">
         <div class="card-deck">
             <button class="card bg-primary" onclick="location.href='{{url('gameView/breakout')}}'">
-                <div class="card-body text-center">
+                <div class="card-body">
                     <p class="card-text">Breakout</p>
                 </div>
             </button>
@@ -22,7 +22,7 @@
             </button>
             <button class="card bg-danger">
                 <div class="card-body text-center" onclick="location.href='{{url('gameView/jumper')}}'">
-                    <p class="card-text">Some text inside the fourth card</p>
+                    <p class="card-text">Jumper</p>
                 </div>
             </button>
         </div>
