@@ -16,16 +16,16 @@
         </div>
 
         <div class="row" style="margin-top: 10px">
-            <div class="col-6" style="border: solid #1a202c 5px">
+            <div class="col-6" style="background-color: #F6F6F6; border-radius: 5px; border-style: solid; border-radius: 20px; border-color: #CECECE">
                 Apie zaidima:
                 <br>{{ $data -> description }}
             </div>
-            <div class="col-1" style="border: solid #1a202c 5px; margin-left: 5px">
+            <div class="col-1" style="margin-left: 45px;margin-right: 45px; background-color: #F6F6F6; border-radius: 5px; border-style: solid; border-radius: 20px; border-color: #CECECE">
                 Rating:
                 <br>{{ $data -> rating }}/5
             </div>
             @if (session()->has('id'))
-            <div class="col-4" style="border: solid #1a202c 5px; margin-left: 5px">
+            <div class="col-4" style="background-color: #F6F6F6; border-radius: 5px; border-style: solid; border-radius: 20px; border-color: #CECECE">
                 <form method="post" action="{{url('leaveReview')}}">
                     <input type="hidden" class="editInput" stype="string" name="gameId" value="{{ $data -> id_GAME }}" readonly>
                     @csrf
@@ -60,36 +60,36 @@
             </div>
             @endif
         </div>
-        <div class="row" style="border: solid #1a202c 5px; margin-top: 10px; margin-bottom: 10px">
-            <div class="col-sm">
+        <div class="row" style="margin-top: 10px; margin-bottom: 10px">
+            <div style="background-color: #F6F6F6; border-radius: 5px; border-style: solid; border-radius: 20px; border-color: #CECECE" class="col-sm">
                 Leaderboard:
-                <table>
-                    <tr>
-                        <th><h3>Username</h3></th>
-                        <th><h3>Score</h3></th>
-                        <th><h3>Date</h3></th>
-                    </tr>
+                <table style="background-color: #F6F6F6; border-radius: 5px" class="table table-hover table-sm">
+{{--                    <tr>--}}
+{{--                        <th><h3>Username</h3></th>--}}
+{{--                        <th><h3>Score</h3></th>--}}
+{{--                        <th><h3>Date</h3></th>--}}
+{{--                    </tr>--}}
                     @foreach($scores as $score)
                         <tr>
                             <td>{{ $score -> userName }}</td>
                             <td>{{ $score -> score }}</td>
-                            <td>{{ $score -> date }}</td>
+{{--                            <td>{{ $score -> date }}</td>--}}
                         </tr>
                     @endforeach
                 </table>
             </div>
-            <div class="col-sm">
+            <div style="background-color: #F6F6F6; border-radius: 5px; border-style: solid; border-radius: 20px; border-color: #CECECE"  class="col-sm">
                 Comments:
-                <table>
-                    <tr>
-                        <th><h3>Username</h3></th>
-                        <th><h3>Rating</h3></th>
-                        <th><h3>Comment</h3></th>
-                    </tr>
+                <table style="background-color: #F6F6F6; border-radius: 5px" class="table table-hover table-sm">
+{{--                    <tr>--}}
+{{--                        <th><h3>Username</h3></th>--}}
+{{--                        <th><h3>Rating</h3></th>--}}
+{{--                        <th><h3>Comment</h3></th>--}}
+{{--                    </tr>--}}
                     @foreach($comments as $comment)
                         <tr>
                             <td>{{ $comment -> userName }}</td>
-                            <td>{{ $comment -> rating }}</td>
+{{--                            <td>{{ $comment -> rating }}</td>--}}
                             <td>{{ $comment -> description }}</td>
                         </tr>
                     @endforeach

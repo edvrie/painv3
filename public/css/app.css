@@ -12,6 +12,25 @@
     overflow: hidden;
 }
 
+.box {
+    background-color: black;
+    left: 32px;
+    width: 20px;
+    height: 20px;
+}
+
+body {
+    background: #E4E2E1;
+}
+
+.Centered{
+    text-align: center;
+}
+
+.HeaderColor{
+    background-color: #ACABAF;
+}
+
 div.stars{
     width: 270px;
     display: inline-block;
