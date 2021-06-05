@@ -7,8 +7,13 @@
         let myCoolCode = document.createElement("script");
         myCoolCode.setAttribute("src", "{{ $data -> script }}");
         document.body.appendChild(myCoolCode);
+        let session = '<?php echo session()->has('id') ?>';
     </script>
-
+    <form action="{{ url('postScore') }}" method="post" id="scoreForm">
+        @csrf
+        <input type="hidden" name="score" id="score" value="0">
+        <input type="hidden" id="gameId" name="gameId" value="{{ $data -> id_GAME }}">
+    </form>
     <div class="container">  {{--canvas --}}
         <div class="row">
             <canvas id="gameCanvas1" style="width: 100%; text-align: center; display: inline; border: solid #1a202c 5px; margin-top: 5px">
@@ -17,7 +22,7 @@
 
         <div class="row" style="margin-top: 10px">
             <div class="col-6" style="background-color: #F6F6F6; border-radius: 5px; border-style: solid; border-radius: 20px; border-color: #CECECE">
-                Apie zaidima:
+                About the game:
                 <br>{{ $data -> description }}
             </div>
             <div class="col-1" style="margin-left: 45px;margin-right: 45px; background-color: #F6F6F6; border-radius: 5px; border-style: solid; border-radius: 20px; border-color: #CECECE">

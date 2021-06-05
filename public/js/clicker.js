@@ -1,6 +1,12 @@
 let canvas = document.getElementById("gameCanvas1");
 let context = canvas.getContext("2d");
 
+let gameStart = false;
+let gameEnd = false;
+
+let gameStartTime;
+let gameEndTime;
+
 let objectPosX = canvas.width/2;
 let objectPosY = canvas.height/2;
 let objectRadius = 30;
@@ -26,6 +32,14 @@ function saveMouseClickPos(event){
     mousePos.y = elementRelativeY * canvas.height / canvas.clientHeight;
 }
 
+function startGameHandler(e){
+    if (e.key === ' '){
+        startGame();
+        gameStart = true;
+        gameStartTime = Date.now();
+    }
+}
+
 function checkIfClickedObject(){
     let x = (mousePos.x - objectPosX)**2;
     let y = (mousePos.y - objectPosY)**2;
@@ -40,6 +54,15 @@ function checkIfClickedObject(){
 function setCanvas(){
     context.fillStyle = 'white';
     context.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+function drawPlayButton(){
+    context.beginPath();
+    context.font = '15px Courier New';
+    context.fillStyle = 'black';
+    context.fillText("Clicker", ((canvas.width)/2)-40, ((canvas.height)/2)-40)
+    context.fillText("Press spacebar to play", ((canvas.width)/2)-100, ((canvas.height)/2)+20)
+
 }
 
 function drawObject(){
@@ -80,6 +103,7 @@ function drawShopItems(){
         context.closePath();
         itemPosY += itemHeight;
         context.fillStyle = 'black';
+        context.font = '15px Courier New';
         context.fillText(textItem[i], textPosX, textPosY);
         textPosY += itemHeight;
     }
@@ -131,27 +155,60 @@ function drawScore(){
     context.fillText("Currency: "+currency, 150, 40);
 }
 
+function gameOver(){
+    if (clicks === 1000000){
+        clearInterval(autoClicksInt);
+        clearInterval(interval);
+        alert("You Win!");
+        gameEndTime = Date.now();
+        if (session === '1'){
+            let confirmation = confirm("Submit score?");
+            if (confirmation === true){
+                document.getElementById("score").value = Math.floor(clicks * ( gameEndTime - gameStartTime )/1000);
+                document.getElementById("scoreForm").submit();
+            }
+            PreGame();
+        }
+    }
+}
+
 function loop(){
     setCanvas();
     drawObject();
     drawShop();
     drawScore();
+    gameOver();
     if(checkIfClickedObject()){
         clicks += 1;
         currency += 1;
     }
     checkIfClickedOnShopItems();
-    addAutoClicks();
+    //addAutoClicks();
     console.log(autoClicks);
     mousePos.x = 0;
     mousePos.y = 0;
 }
 
 function addAutoClicks(){
-    setTimeout(addAutoClicks, 1000);
     clicks += autoClicks;
     currency += autoClicks;
 }
 
+function PreGame(){
+    clicks = 0;
+    autoClicks = 0;
+    currency = 0;
+    document.addEventListener("keydown", startGameHandler, false);
+    drawPlayButton();
+}
 
-let interval = setInterval(loop, 10);
+let autoClicksInt;
+let interval;
+
+function startGame(){
+    document.removeEventListener("keydown", startGameHandler, false);
+    autoClicksInt = setInterval(addAutoClicks, 1000);
+    interval = setInterval(loop, 50);
+}
+
+PreGame();
