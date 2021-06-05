@@ -10,6 +10,7 @@ let pdy = 5;
 
 let gameTimer = 10;
 let gameStarted = false;
+let gameEnd = false;
 
 let gridOffsetX = 20;//25
 let gridMarginX = 5;
@@ -41,26 +42,40 @@ let upPressed = false;
 let animationUpInterval;
 let animationDownInterval;
 let gameInterval;
+let timer = 60;
+
+let score;
 
 
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 
 function keyDownHandler(e) {
-    e.preventDefault();
     if((e.key === "Right" || e.key === "ArrowRight") && rightPressed !== true && gameStarted) {
         rightPressed = true;
+        score += 1;
         moveObjectRight();
+        generatePlatforms();
+        console.log(platformValues);
+        platformValues.shift();
 
     }
     else if((e.key === "Left" || e.key === "ArrowLeft") && leftPressed !== true && gameStarted) {
         leftPressed = true;
+        score += 1;
         moveObjectLeft();
+        generatePlatforms();
+        console.log(platformValues);
+        platformValues.shift();
 
     }
     else if(e.key === "Up" || e.key === "ArrowUp"){
         upPressed = true;
+        score += 1;
         moveObjectUp();
+        generatePlatforms();
+        console.log(platformValues);
+        platformValues.shift();
 
     }
     else if(e.key === ' '){
@@ -89,6 +104,8 @@ function timeouts(){
     }, firstAnimationTimer);
     setTimeout(function(){
         clearInterval(animationDownInterval);
+        checkIfJumpedToEmpty();
+        endGameScreen();
         firstLevelY = 0;
         secondLevelY = gridY;
         thirdLevelY = gridY*2;
@@ -101,6 +118,10 @@ function moveObjectLeft() {
     document.removeEventListener("keydown", keyDownHandler, false);
     switch (objectPos.currentPlatform) {
         case 1:
+            gameOver();
+            tempPosX = gridOffsetX + objectOffsetToCenter - gridX;
+            animationUpInterval = setInterval(moveAnimationLeft, gameTimer);
+            timeouts();
             break;
         case 2:
             tempPosX = gridOffsetX + objectOffsetToCenter;
@@ -112,9 +133,11 @@ function moveObjectLeft() {
             tempPosX = gridOffsetX + gridX + objectOffsetToCenter;
             animationUpInterval = setInterval(moveAnimationLeft, gameTimer);
             timeouts();
+
             objectPos.currentPlatform = 2;
             break;
     }
+
 }
 
 
@@ -130,15 +153,16 @@ function moveObjectRight(){
             break;
         case 2:
             tempPosX = gridOffsetX + gridX*2 + objectOffsetToCenter;
-            //clearInterval(animationUpInterval);
             animationUpInterval = setInterval(moveAnimationRight, gameTimer);
             timeouts();
             objectPos.currentPlatform = 3;
             break;
         case 3:
-            break;
+            gameOver();
+            tempPosX = gridOffsetX + gridX*3 + objectOffsetToCenter;
+            animationUpInterval = setInterval(moveAnimationRight, gameTimer);
+            timeouts();
     }
-
 
 }
 
@@ -146,6 +170,7 @@ function moveObjectUp(){
     document.removeEventListener("keydown", keyDownHandler, false);
     animationUpInterval = setInterval(moveAnimationUp, 10);
     timeouts();
+    checkIfJumpedToEmpty();
 }
 
 function moveAnimationUp(){
@@ -167,7 +192,6 @@ function moveAnimationLeft(){
 
 function moveDown(){
     innitDraw();
-    console.log("down");
     if (objectPos.y < canvas.height - platformHeight - objectSize){
         objectPos.y += pdy;
         if (secondLevelY < canvas.height - platformHeight){
@@ -182,7 +206,6 @@ function moveDown(){
 
 function moveAnimationRight(){
     innitDraw();
-    console.log("right");
     if (objectPos.x < tempPosX){
         objectPos.x += odx;
         if (objectPos.y > canvas.height - platformHeight - gridY - objectSize){
@@ -202,6 +225,15 @@ function setCanvas(){
     context.fillRect(0, 0, canvas.width, canvas.height);
 }
 
+function drawPlayButton(){
+    context.beginPath();
+    context.font = '15px Courier New';
+    context.fillStyle = 'black';
+    context.fillText("Jumper", ((canvas.width)/2)-40, ((canvas.height)/2)-40)
+    context.fillText("Press spacebar to play", ((canvas.width)/2)-100, ((canvas.height)/2)+20)
+
+}
+
 function drawObject(){
     context.beginPath();
     context.rect(objectPos.x, objectPos.y, 10, 10);
@@ -215,16 +247,25 @@ function drawInnitPlatforms(){
     context.beginPath();
     context.fillStyle = 'black';
     for (let i = 0; i < 3; i++){
-        context.rect(gridOffsetX + (gridX*i), canvas.height - platformHeight - firstLevelY, platformWidth, platformHeight);
+        if (platformValues[0][i] === 1){
+            context.rect(gridOffsetX + (gridX*i), canvas.height - platformHeight - firstLevelY, platformWidth, platformHeight);
+        }
     }
     for (let i = 0; i < 3; i++){
-        context.rect(gridOffsetX + (gridX*i), canvas.height - platformHeight - secondLevelY, platformWidth, platformHeight);
+        if (platformValues[1][i] === 1){
+            context.rect(gridOffsetX + (gridX*i), canvas.height - platformHeight - secondLevelY, platformWidth, platformHeight);
+        }
+
     }
     for (let i = 0; i < 3; i++){
-        context.rect(gridOffsetX + (gridX*i), canvas.height - platformHeight - thirdLevelY, platformWidth, platformHeight);
+        if (platformValues[2][i] === 1){
+            context.rect(gridOffsetX + (gridX*i), canvas.height - platformHeight - thirdLevelY, platformWidth, platformHeight);
+        }
     }
     for (let i = 0; i < 3; i++){
-        context.rect(gridOffsetX + (gridX*i), canvas.height - platformHeight - fourthLevelY, platformWidth, platformHeight);
+        if (platformValues[3][i] === 1){
+            context.rect(gridOffsetX + (gridX*i), canvas.height - platformHeight - fourthLevelY, platformWidth, platformHeight);
+        }
     }
     context.fill();
     context.closePath();
@@ -237,14 +278,98 @@ function innitDraw(){
     setCanvas();
     drawInnitPlatforms();
     drawObject();
-
+    drawScore();
 }
 
-function innitPlatforms(){
-
+function generatePlatforms(){
+    let temp = []
+    for (let i = 0; i < 3; i++){
+        temp[i] = Math.round(Math.random());
+    }
+    temp = reevaluatePlatforms(temp);
+    platformValues.push([temp[0], temp[1], temp[2]]);
 }
+
+function reevaluatePlatforms(genPlatform){
+    if (platformValues[2][0] === 1){
+        let index = Math.round(Math.random())
+        genPlatform[index] = 1;
+    }
+    else if (platformValues[2][1] === 1){
+        let index = Math.round(Math.random() * 2)
+        genPlatform[index] = 1;
+    }
+    else if (platformValues[2][2] === 1){
+        let index = Math.round(Math.random() + 1)
+        genPlatform[index] = 1;
+    }
+    return genPlatform;
+}
+
+function checkIfJumpedToEmpty(){
+    if (platformValues[1][objectPos.currentPlatform-1] === 0){
+        gameOver();
+    }
+}
+
+function gameOver(){
+    gameStarted = false;
+    gameEnd = true;
+}
+
+function endGameScreen(){
+    if (gameEnd === true){
+        alert("Game Over!");
+        if (session === '1'){
+            let confirmation = confirm("Submit score?");
+            if (confirmation === true){
+                document.getElementById("score").value = score;
+                document.getElementById("scoreForm").submit();
+            }
+        }
+        preGame();
+    }
+}
+
+function drawScore(){
+    context.beginPath();
+    context.font = '10px Courier New';
+    context.fillText("Score: " + score, 0, 20);
+    context.closePath();
+}
+
+function preGame(){
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    setCanvas();
+    drawPlayButton();
+    platformValues = [[1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]];
+    objectPos = {
+        x:gridOffsetX + gridX + objectOffsetToCenter,
+        y:canvas.height - platformHeight - objectSize,
+        currentPlatform:2
+    };
+}
+
+function tickDownTimer(){
+    timer -= 1;
+}
+
 
 function startGame(){
     gameStarted = true;
+    gameEnd = false;
+    score = 0;
     innitDraw();
+    gameInterval = setInterval(function (){
+        if (timer === 0){
+            gameOver();
+            endGameScreen();
+        }
+        else{
+            clearInterval(gameInterval);
+        }
+        tickDownTimer();
+    }, 1000);
 }
+
+preGame();
