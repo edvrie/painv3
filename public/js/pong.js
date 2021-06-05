@@ -1,19 +1,21 @@
 var canvas = document.getElementById("gameCanvas1");
 var context = canvas.getContext("2d");
 
+let gameStart = false;
+let gameOver = false;
 
 let ballRadius = 3
-let x = canvas.width/2;
-let y = canvas.height/2;
-let bdx = 1;
-let bdy = 0;
+let x;
+let y;
+let bdx;
+let bdy;
 
 let paddleWidth = 3;
 let paddleLength = 30;
 let firstPaddleX = 10;
 let secondPaddleX = canvas.width - firstPaddleX - paddleWidth;
-let firstPaddleY = (canvas.height - paddleLength) / 2;
-let secondPaddleY = (canvas.height - paddleLength) / 2;
+let firstPaddleY;
+let secondPaddleY;
 let pdy = 1;
 
 let p1UpPressed = false;
@@ -32,33 +34,33 @@ document.addEventListener("keydown", player2KeyDownHandler, false);
 document.addEventListener("keyup", player2KeyUpHandler, false);
 
 function player1KeyDownHandler(e) {
-    if(e.key === 87 || e.key === "w") {
+    if(e.key === 87 || e.key === "w" && gameStart === true) {
         p1UpPressed = true;
         e.preventDefault();
     }
-    else if(e.key === 83 || e.key === "s") {
+    else if(e.key === 83 || e.key === "s" && gameStart === true) {
         p1DownPressed = true;
         e.preventDefault();
     }
 }
 
 function player1KeyUpHandler(e) {
-    if(e.key === 87 || e.key === "w") {
+    if(e.key === 87 || e.key === "w" && gameStart === true) {
         p1UpPressed = false;
         e.preventDefault();
     }
-    else if(e.key === 83 || e.key === "s") {
+    else if(e.key === 83 || e.key === "s" && gameStart === true) {
         p1DownPressed = false;
         e.preventDefault();
     }
 }
 
 function player2KeyDownHandler(e) {
-    if(e.key === "Up" || e.key === "ArrowUp") {
+    if(e.key === "Up" || e.key === "ArrowUp" && gameStart === true) {
         p2UpPressed = true;
         e.preventDefault();
     }
-    else if(e.key === "Down" || e.key === "ArrowDown") {
+    else if(e.key === "Down" || e.key === "ArrowDown" && gameStart === true) {
         p2DownPressed = true;
         e.preventDefault();
     }
@@ -75,6 +77,13 @@ function player2KeyUpHandler(e) {
     }
 }
 
+function startGameHandler(e){
+    if(e.key === ' '){
+        startGame();
+        gameStart = true;
+    }
+}
+
 function setCanvas(){
     context.fillStyle = 'black';
     context.fillRect(0, 0, canvas.width, canvas.height);
@@ -82,13 +91,10 @@ function setCanvas(){
 
 function drawPlayButton(){
     context.beginPath();
-    context.rect(((canvas.width)/2)-40, (canvas.height)/2, 80, 30);
-    context.fillStyle = "#FFFFFF";
-    context.fill();
-    context.closePath();
     context.font = '15px Courier New';
-    context.fillStyle = 'black';
-    context.fillText("Play Now", ((canvas.width)/2)-35, ((canvas.height)/2)+20)
+    context.fillStyle = 'white';
+    context.fillText("Pong", ((canvas.width)/2)-20, ((canvas.height)/2)-40)
+    context.fillText("Press spacebar to play", ((canvas.width)/2)-100, ((canvas.height)/2)+20)
 
 }
 
@@ -170,9 +176,9 @@ function P2Scores(){
 
 function Score(){
     context.font = '30px Courier New';
-    context.fillText(""+p1Score, (canvas.width/2)-15, 20);
+    context.fillText(""+p1Score, (canvas.width/2)-32, 20);
     context.fillText(":", (canvas.width/2) - 1, 20);
-    context.fillText(""+p2Score, (canvas.width/2)+12, 20);
+    context.fillText(""+p2Score, (canvas.width/2)+30, 20);
 }
 
 function ballCollision(){
@@ -242,6 +248,32 @@ function RestartGame(){
 
 }
 
+function checkIfGameOver(){
+    if (p1Score === 10){
+        clearInterval(interval);
+        alert("Player 1 wins!");
+        gameOver = true;
+        gameStart = false;
+    }
+    else if (p2Score === 10){
+        clearInterval(interval);
+        alert("Player 2 wins!")
+        gameOver = true;
+        gameStart = false;
+    }
+    if (gameOver){
+        clearInterval(interval);
+        if (session === '1'){
+            let confirmation = confirm("Submit score?");
+            if (confirmation === true){
+                document.getElementById("score").value = p1Score + p2Score;
+                document.getElementById("scoreForm").submit();
+            }
+        }
+        PreGame();
+    }
+}
+
 function draw(){
     context.clearRect(0, 0, canvas.width, canvas.height);
     setCanvas();
@@ -249,6 +281,7 @@ function draw(){
     drawP2Paddle();
     drawBall();
     Score();
+    checkIfGameOver();
 
     ballCollision();
     playerMovement();
@@ -258,13 +291,25 @@ function draw(){
 }
 
 function startGame(){
+    document.removeEventListener('keydown', startGameHandler, false);
     interval = setInterval(draw, 10);
 }
 
-function gameScreen(){
+function PreGame(){
+    gameOver = false;
+    gameStart = false;
+    x = canvas.width/2;
+    y = canvas.height/2;
+    bdx = 1;
+    bdy = 0;
+    firstPaddleY = (canvas.height - paddleLength) / 2;
+    secondPaddleY = (canvas.height - paddleLength) / 2;
+    p1Score = 0;
+    p2Score = 0;
+    document.addEventListener('keydown', startGameHandler, false)
     setCanvas();
     drawPlayButton();
-
 }
-startGame();
+
+PreGame();
 

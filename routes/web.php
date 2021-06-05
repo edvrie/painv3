@@ -40,3 +40,5 @@ Route::post('deleteSelectedUser', [\App\Http\Controllers\userController::class, 
 Route::post('deleteSelectedReview', [\App\Http\Controllers\reviewController::class, 'reviewDelete']);
 Route::post('deleteSelectedScore', [\App\Http\Controllers\scoreController::class, 'scoreDelete']);
 Route::post('leaveReview', [\App\Http\Controllers\reviewController::class, 'leaveUserReview']);
+
+Route::post('postScore', [\App\Http\Controllers\scoreController::class, 'postScore']);

@@ -45,4 +45,16 @@ class scoreController extends Controller
 
         return redirect('/deleteScore')->with('success', 'Successfully deleted review');
     }
+
+    public function postScore(Request $request)
+    {
+        $userID = session()->get('id');
+        $gameID = $request->input("gameId");
+        $score = $request->input("score");
+        print($score);
+        die();
+
+
+        return redirect()->back();
+    }
 }

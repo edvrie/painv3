@@ -1,6 +1,13 @@
 let canvas = document.getElementById("gameCanvas1");
 let context = canvas.getContext("2d");
 
+let firstAnimationTimer = 110;
+let secondAnimationTimer = 260;
+
+let odx = 10;
+let ody = 5;
+let pdy = 5;
+
 let gameTimer = 10;
 let gameStarted = false;
 
@@ -9,9 +16,14 @@ let gridMarginX = 5;
 let gridX = canvas.width/3;
 let gridY = canvas.height/3;
 let tempGridY = gridY;
+let firstLevelY = 0;
+let secondLevelY = gridY;
+let thirdLevelY = gridY*2;
+let fourthLevelY = gridY*3;
 
 let platformWidth = 60;
 let platformHeight = 10;
+let platformValues = [[1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]];
 
 let tempPosX = 0;
 let objectSize = 10;
@@ -26,7 +38,8 @@ let leftPressed = false;
 let rightPressed = false;
 let upPressed = false;
 
-let animationInterval;
+let animationUpInterval;
+let animationDownInterval;
 let gameInterval;
 
 
@@ -34,23 +47,30 @@ document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 
 function keyDownHandler(e) {
+    e.preventDefault();
     if((e.key === "Right" || e.key === "ArrowRight") && rightPressed !== true && gameStarted) {
-        moveObjectRight();
         rightPressed = true;
+        moveObjectRight();
+
     }
     else if((e.key === "Left" || e.key === "ArrowLeft") && leftPressed !== true && gameStarted) {
-        moveObjectLeft();
         leftPressed = true;
+        moveObjectLeft();
+
     }
     else if(e.key === "Up" || e.key === "ArrowUp"){
         upPressed = true;
+        moveObjectUp();
+
     }
-    else if(e.keyCode === 32 || e.key === ' '){
+    else if(e.key === ' '){
         startGame();
     }
+
 }
 
 function keyUpHandler(e) {
+    e.preventDefault();
     if(e.key === "Right" || e.key === "ArrowRight") {
         rightPressed = false;
     }
@@ -62,97 +82,125 @@ function keyUpHandler(e) {
     }
 }
 
+function timeouts(){
+    setTimeout(function(){
+        clearInterval(animationUpInterval);
+        animationDownInterval = setInterval(moveDown, gameTimer);
+    }, firstAnimationTimer);
+    setTimeout(function(){
+        clearInterval(animationDownInterval);
+        firstLevelY = 0;
+        secondLevelY = gridY;
+        thirdLevelY = gridY*2;
+        fourthLevelY = gridY*3;
+        document.addEventListener("keydown", keyDownHandler, false);
+    }, secondAnimationTimer);
+}
+
 function moveObjectLeft() {
+    document.removeEventListener("keydown", keyDownHandler, false);
     switch (objectPos.currentPlatform) {
         case 1:
             break;
         case 2:
             tempPosX = gridOffsetX + objectOffsetToCenter;
-            moveAnimationLeft();
+            animationUpInterval = setInterval(moveAnimationLeft, gameTimer);
+            timeouts();
             objectPos.currentPlatform = 1;
-            console.log(tempPosX);
-            console.log(objectPos.currentPlatform);
             break;
         case 3:
             tempPosX = gridOffsetX + gridX + objectOffsetToCenter;
-            moveAnimationLeft();
+            animationUpInterval = setInterval(moveAnimationLeft, gameTimer);
+            timeouts();
             objectPos.currentPlatform = 2;
-            console.log(tempPosX);
-            console.log(objectPos.currentPlatform);
             break;
     }
 }
+
+
 function moveObjectRight(){
+    document.removeEventListener("keydown", keyDownHandler, false);
     switch (objectPos.currentPlatform){
         case 1:
             tempPosX = gridOffsetX + gridX + objectOffsetToCenter;
-            moveAnimationRight();
+            //clearInterval(animationUpInterval);
+            animationUpInterval = setInterval(moveAnimationRight, gameTimer);
+            timeouts();
             objectPos.currentPlatform = 2;
-            console.log(tempPosX);
-            console.log(objectPos.currentPlatform);
             break;
         case 2:
             tempPosX = gridOffsetX + gridX*2 + objectOffsetToCenter;
-            moveAnimationRight();
+            //clearInterval(animationUpInterval);
+            animationUpInterval = setInterval(moveAnimationRight, gameTimer);
+            timeouts();
             objectPos.currentPlatform = 3;
-            console.log(tempPosX);
-            console.log(objectPos.currentPlatform);
             break;
         case 3:
             break;
     }
+
+
 }
 
 function moveObjectUp(){
-    tempPosX = gridOffsetX + gridX + objectOffsetToCenter;
+    document.removeEventListener("keydown", keyDownHandler, false);
+    animationUpInterval = setInterval(moveAnimationUp, 10);
+    timeouts();
+}
+
+function moveAnimationUp(){
+    innitDraw();
+    if (objectPos.y > canvas.height - platformHeight - gridY - objectSize){
+        objectPos.y -= ody;
+    }
 }
 
 function moveAnimationLeft(){
+    innitDraw();
     if (objectPos.x > tempPosX){
-        objectPos.x -= 10;
+        objectPos.x -= odx;
         if (objectPos.y > canvas.height - platformHeight - gridY - objectSize){
-            objectPos.y -= 5;
+            objectPos.y -= ody;
         }
-        requestAnimationFrame(moveAnimationLeft);
     }
-    else{
-        cancelAnimationFrame(moveAnimationLeft);
-    }
-    //dropObject();
 }
-//
-// function dropObject(){
-//     if (objectPos.y < canvas.height - platformHeight - objectSize) {
-//         objectPos.y += 5;
-//         requestAnimationFrame(dropObject);
-//     }
-//     else{
-//         cancelAnimationFrame(dropObject);
-//     }
-// }
+
+function moveDown(){
+    innitDraw();
+    console.log("down");
+    if (objectPos.y < canvas.height - platformHeight - objectSize){
+        objectPos.y += pdy;
+        if (secondLevelY < canvas.height - platformHeight){
+            firstLevelY -= pdy;
+            secondLevelY -= pdy;
+            thirdLevelY -= pdy;
+            fourthLevelY -= pdy;
+        }
+
+    }
+}
 
 function moveAnimationRight(){
+    innitDraw();
+    console.log("right");
     if (objectPos.x < tempPosX){
-        objectPos.x += 10;
+        objectPos.x += odx;
         if (objectPos.y > canvas.height - platformHeight - gridY - objectSize){
-            objectPos.y -= 5;
+            objectPos.y -= ody;
         }
-        requestAnimationFrame(moveAnimationRight);
+        else{
+            clearInterval(animationUpInterval);
+            animationDownInterval = setInterval(moveDown, 10);
+        }
     }
-    else{
-        cancelAnimationFrame(moveAnimationRight)
-    }
-    //moveObjectDown();
 }
 
-// function moveObjectDown(){
-//     if (objectPos.y < canvas.height - platformHeight - objectSize){
-//         objectPos.y += 5;
-//     }
-//     requestAnimationFrame(moveObjectDown);
-// }
 
 
+function setCanvas(){
+    context.fillStyle = "#82dae8";
+    context.fillRect(0, 0, canvas.width, canvas.height);
+}
 
 function drawObject(){
     context.beginPath();
@@ -167,35 +215,36 @@ function drawInnitPlatforms(){
     context.beginPath();
     context.fillStyle = 'black';
     for (let i = 0; i < 3; i++){
-        context.rect(gridOffsetX + (gridX*i), canvas.height - platformHeight, platformWidth, platformHeight);
+        context.rect(gridOffsetX + (gridX*i), canvas.height - platformHeight - firstLevelY, platformWidth, platformHeight);
     }
     for (let i = 0; i < 3; i++){
-        context.rect(gridOffsetX + (gridX*i), canvas.height - platformHeight - gridY, platformWidth, platformHeight);
+        context.rect(gridOffsetX + (gridX*i), canvas.height - platformHeight - secondLevelY, platformWidth, platformHeight);
     }
     for (let i = 0; i < 3; i++){
-        context.rect(gridOffsetX + (gridX*i), canvas.height - platformHeight - gridY*2, platformWidth, platformHeight);
+        context.rect(gridOffsetX + (gridX*i), canvas.height - platformHeight - thirdLevelY, platformWidth, platformHeight);
+    }
+    for (let i = 0; i < 3; i++){
+        context.rect(gridOffsetX + (gridX*i), canvas.height - platformHeight - fourthLevelY, platformWidth, platformHeight);
     }
     context.fill();
     context.closePath();
 }
 
-function loop(){
+
+
+function innitDraw(){
     context.clearRect(0, 0, canvas.width, canvas.height);
+    setCanvas();
     drawInnitPlatforms();
     drawObject();
-    if (objectPos.y === canvas.height - platformHeight - gridY - objectSize){
-        while (objectPos.y < canvas.height - platformHeight - objectSize){
-            objectPos.y += 1;
-            gridY -= 1;
-        }
-        gridY = tempGridY;
-    }
 
+}
 
+function innitPlatforms(){
 
 }
 
 function startGame(){
     gameStarted = true;
-    gameInterval = setInterval(loop, gameTimer);
+    innitDraw();
 }
