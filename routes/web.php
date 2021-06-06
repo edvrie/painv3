@@ -21,6 +21,19 @@ Route::get('/gameView', function () {
     return view('gameView');
 });
 
+Route::get('/singleplayer', function () {
+    return view('categories/singleplayerView');
+});
+
+Route::get('/multiplayer', function () {
+    return view('categories/multiplayerView');
+});
+
+Route::get('/arcade', function () {
+    return view('categories/arcadeView');
+});
+
+
 Route::get('gameView/{id}', [\App\Http\Controllers\gameController::class, 'gameViewLoad']);
 
 Route::get('deleteReview', [\App\Http\Controllers\reviewController::class, 'reviewDeleteLoad']);

@@ -28,9 +28,9 @@
                     Game Categories
                 </a>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#">Arcade</a>
-                    <a class="dropdown-item" href="#">Single player</a>
-                    <a class="dropdown-item" href="#">Multiplayer</a>
+                    <a class="dropdown-item" href="{{ url('/arcade') }}">Arcade</a>
+                    <a class="dropdown-item" href="{{ url('/singleplayer') }}">Single player</a>
+                    <a class="dropdown-item" href="{{ url('/multiplayer') }}">Multiplayer</a>
                 </div>
             </li>
             @if (session()->get('admin') == 1)
