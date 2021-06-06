@@ -45,7 +45,7 @@
                     <a class="dropdown-item" href="{{ url('/deleteUser') }}">Delete Users</a>
                     <a class="dropdown-item" href="{{ url('/deleteReview') }}">Delete Reviews</a>
                     <a class="dropdown-item" href="{{ url('/deleteScore') }}">Delete Scores</a>
-                    <a class="dropdown-item" href="#">Change Game Descriptions</a>
+                    <a class="dropdown-item" href="{{ url('/changeDescription') }}">Change Game Descriptions</a>
                 </div>
             </li>
             @endif

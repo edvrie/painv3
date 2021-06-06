@@ -7,6 +7,7 @@ use App\Models\Review;
 use App\Models\Scores;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class scoreController extends Controller
 {
@@ -51,9 +52,24 @@ class scoreController extends Controller
         $userID = session()->get('id');
         $gameID = $request->input("gameId");
         $score = $request->input("score");
-        print($score);
-        die();
 
+        $ExistingScore = Scores::all() -> where("fk_GAMEid_GAME",$gameID) -> where("fk_USERSid_USERS",$userID) -> first();
+
+        print($ExistingScore);
+
+        if($ExistingScore == null)
+        {
+            $NewScore = new Scores();
+            $NewScore-> score = $score;
+            $NewScore-> date = Carbon::now();
+            $NewScore-> fk_GAMEid_GAME = $gameID;
+            $NewScore-> fk_USERSid_USERS = $userID;
+            $NewScore->save();
+        }
+        else{
+            $ExistingScore->score = $score;
+            $ExistingScore->save();
+        }
 
         return redirect()->back();
     }

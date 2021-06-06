@@ -13,6 +13,36 @@ use function PHPUnit\Framework\isEmpty;
 
 class gameController extends Controller
 {
+    public function changeGameDescriptionLoad(){
+        if(session()->get('admin')!=1)
+        {
+            return redirect('/')->with('danger', 'Trying to access an ADMIN page!');
+        }
+
+        $data = Game::all();
+
+        return view('descViews/gameDescriptions',compact(array('data')));
+    }
+
+    public function changeGameDescription(Request $request){
+
+        if(session()->get('admin')!=1)
+        {
+            return redirect('/')->with('danger', 'Trying to access an ADMIN page!');
+        }
+
+        $gameID = $request->input("id");
+        $description = $request->input("description");
+
+        $Game = Game::all() -> where("id_GAME",$gameID) ->first();
+
+        $Game->description = $description;
+        $Game->save();
+
+        $data = Game::all();
+        return view('descViews/gameDescriptions',compact(array('data')));
+    }
+
     public function gameViewLoad($id)
     {
         $data = Game::all() -> where("name",$id) -> first();
