@@ -28,7 +28,7 @@ class gameController extends Controller
 
         if(session()->get('admin')!=1)
         {
-            return redirect('/')->with('danger', 'Trying to access an ADMIN page!');
+            return redirect('/')->with('danger', 'Trying to access an ADMIN function!');
         }
 
         $gameID = $request->input("id");
@@ -54,7 +54,7 @@ class gameController extends Controller
         $comments = Review::all() -> where("fk_GAMEid_GAME",$gameid);
 
         // RATING APSKAICIAVIMAS
-        $Zaidimas = Game::all() -> where("id_GAME",$gameid)->first();
+        $RatingChange = Game::all() -> where("id_GAME",$gameid)->first();
         $AllGameReviews = Review::all() -> where("fk_GAMEid_GAME",$gameid);
         $sum = 0;
         $kel = 0;
@@ -74,8 +74,8 @@ class gameController extends Controller
         else{
             $sum = 0;
         }
-        $Zaidimas->rating = $sum;
-        $Zaidimas->save();
+        $RatingChange->rating = $sum;
+        $RatingChange->save();
 
         foreach($scores as $score)
         {

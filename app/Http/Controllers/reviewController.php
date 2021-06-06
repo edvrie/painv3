@@ -53,35 +53,35 @@ class reviewController extends Controller
     {
         $userID = session()->get('id');
         $gameID = $request->input("gameId");
-        $Ivertinimas = $request->input("star");
-        $Tekstas = $request->input("review");
-        print($Ivertinimas);
-        print($Tekstas);
+        $RatingStar = $request->input("star");
+        $LeftComment = $request->input("review");
+        print($RatingStar);
+        print($LeftComment);
 
         $review = Review::all() -> where("fk_GAMEid_GAME",$gameID) -> where("fk_USERSid_USERS",$userID) -> first();
         print($review);
         if($review == null)
         {
-            if($Ivertinimas == "" && $Tekstas == "") {
+            if($RatingStar == "" && $LeftComment == "") {
                 return redirect()->back();
             }
             else{
                 $Review = new Review();
-                $Review->rating = $Ivertinimas;
-                $Review->description = $Tekstas;
+                $Review->rating = $RatingStar;
+                $Review->description = $LeftComment;
                 $Review->fk_USERSid_USERS = $userID;
                 $Review->fk_GAMEid_GAME = $gameID;
                 $Review->save();
             }
         }
         else {
-            if($Ivertinimas != "")
+            if($RatingStar != "")
             {
-                $review->rating = $Ivertinimas;
+                $review->rating = $RatingStar;
             }
-            if($Tekstas != "")
+            if($LeftComment != "")
             {
-                $review->description = $Tekstas;
+                $review->description = $LeftComment;
             }
             $review->fk_USERSid_USERS = $userID;
             $review->fk_GAMEid_GAME = $gameID;
