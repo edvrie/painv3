@@ -20,7 +20,7 @@ class gameController extends Controller
         $data -> script = $javascript;
 
         $gameid= $data -> id_GAME;
-        $scores = Scores::all() -> where("fk_GAMEid_GAME",$gameid);
+        $scores = Scores::all() -> where("fk_GAMEid_GAME",$gameid) -> sortBy('date')-> sortByDesc('score');
         $comments = Review::all() -> where("fk_GAMEid_GAME",$gameid);
 
         // RATING APSKAICIAVIMAS
