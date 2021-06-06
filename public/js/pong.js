@@ -26,7 +26,9 @@ let p2DownPressed = false;
 let p1Score = 0;
 let p2Score = 0;
 
-
+//----------------------------------
+//INPUTS
+//----------------------------------
 
 document.addEventListener("keydown", player1KeyDownHandler, false);
 document.addEventListener("keyup", player1KeyUpHandler, false);
@@ -84,6 +86,10 @@ function startGameHandler(e){
     }
 }
 
+//----------------------------------
+//ANIMATIONS
+//----------------------------------
+
 function setCanvas(){
     context.fillStyle = 'black';
     context.fillRect(0, 0, canvas.width, canvas.height);
@@ -122,6 +128,31 @@ function drawP2Paddle(){
     context.fill();
     context.closePath();
 }
+
+function Score(){
+    context.font = '30px Courier New';
+    context.fillText(""+p1Score, (canvas.width/2)-32, 20);
+    context.fillText(":", (canvas.width/2) - 1, 20);
+    context.fillText(""+p2Score, (canvas.width/2)+30, 20);
+}
+
+function draw(){
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    setCanvas();
+    drawP1Paddle();
+    drawP2Paddle();
+    drawBall();
+    Score();
+    checkIfGameOver();
+    ballCollision();
+    playerMovement();
+    x += bdx;
+    y += bdy;
+}
+
+//----------------------------------
+//LOGIC
+//----------------------------------
 
 function playerMovement(){
     if (p1DownPressed){
@@ -172,13 +203,6 @@ function P2Scores(){
     p2Score+=1;
     clearInterval(interval);
     RestartGame();
-}
-
-function Score(){
-    context.font = '30px Courier New';
-    context.fillText(""+p1Score, (canvas.width/2)-32, 20);
-    context.fillText(":", (canvas.width/2) - 1, 20);
-    context.fillText(""+p2Score, (canvas.width/2)+30, 20);
 }
 
 function ballCollision(){
@@ -274,21 +298,7 @@ function checkIfGameOver(){
     }
 }
 
-function draw(){
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    setCanvas();
-    drawP1Paddle();
-    drawP2Paddle();
-    drawBall();
-    Score();
-    checkIfGameOver();
 
-    ballCollision();
-    playerMovement();
-
-    x += bdx;
-    y += bdy;
-}
 
 function startGame(){
     document.removeEventListener('keydown', startGameHandler, false);
@@ -312,4 +322,3 @@ function PreGame(){
 }
 
 PreGame();
-

@@ -23,6 +23,10 @@ let autoClicks = 0;
 
 let mousePos = {x : 0, y : 0};
 
+//----------------------------------
+//INPUTS
+//----------------------------------
+
 document.addEventListener("mousedown", saveMouseClickPos, false);
 
 function saveMouseClickPos(event){
@@ -40,16 +44,9 @@ function startGameHandler(e){
     }
 }
 
-function checkIfClickedObject(){
-    let x = (mousePos.x - objectPosX)**2;
-    let y = (mousePos.y - objectPosY)**2;
-    if (x+y < objectRadius**2){
-        return true;
-    }
-    else{
-        return false;
-    }
-}
+//----------------------------------
+//ANIMATIONS
+//----------------------------------
 
 function setCanvas(){
     context.fillStyle = 'white';
@@ -109,6 +106,26 @@ function drawShopItems(){
     }
 }
 
+function drawScore(){
+    context.fillText("Clicks: "+clicks, 150, 20);
+    context.fillText("Currency: "+currency, 150, 40);
+}
+
+//----------------------------------
+//LOGIC
+//----------------------------------
+
+function checkIfClickedObject(){
+    let x = (mousePos.x - objectPosX)**2;
+    let y = (mousePos.y - objectPosY)**2;
+    if (x+y < objectRadius**2){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
 function checkIfClickedOnShopItems(){
     if (mousePos.x > shopItemPosX && mousePos.x < shopItemWidth){
         if (mousePos.y > shopItemHeight && mousePos.y < shopItemHeight + 20){
@@ -150,13 +167,8 @@ function clickedShopItem(itemNumber){
     }
 }
 
-function drawScore(){
-    context.fillText("Clicks: "+clicks, 150, 20);
-    context.fillText("Currency: "+currency, 150, 40);
-}
-
 function gameOver(){
-    if (clicks === 1000000){
+    if (clicks >= 1000000){
         clearInterval(autoClicksInt);
         clearInterval(interval);
         alert("You Win!");
@@ -183,7 +195,6 @@ function loop(){
         currency += 1;
     }
     checkIfClickedOnShopItems();
-    //addAutoClicks();
     console.log(autoClicks);
     mousePos.x = 0;
     mousePos.y = 0;

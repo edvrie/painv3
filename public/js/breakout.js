@@ -1,37 +1,39 @@
-var canvas = document.getElementById("gameCanvas1");
-var context = canvas.getContext("2d");
+let canvas = document.getElementById("gameCanvas1");
+let context = canvas.getContext("2d");
 
 let gameOver = false;
 let gameStarted = false;
 
-var x;
-var y;
-var bdx;
-var bdy;
+let x;
+let y;
+let bdx;
+let bdy;
 
-var ballRadius = 3;
+let ballRadius = 3;
 
-var paddleHeight = 5;
-var paddleWidth = 60;
-var paddleX;
-var rightPressed = false;
-var leftPressed = false;
-var pdx = 4;
+let paddleHeight = 5;
+let paddleWidth = 60;
+let paddleX;
+let rightPressed = false;
+let leftPressed = false;
+let pdx = 4;
 
-let brickRowCount = 10;//var brickRowCount = 10;
-let brickColumnCount = 8;//var brickColumnCount = 8;
-var brickWidth = 30;
-var brickHeight = 5;
-var brickPadding = 2;
-var brickOffsetTop = 20;
-var brickOffsetLeft = 20;
+let brickRowCount = 10;
+let brickColumnCount = 8;
+let brickWidth = 30;
+let brickHeight = 5;
+let brickPadding = 2;
+let brickOffsetTop = 20;
+let brickOffsetLeft = 20;
 
-var bricks = [];
+let bricks = [];
 
+let score = 0;
+let interval;
 
-
-
-var score = 0;
+//-------------------------------------------------
+//INPUTS
+//-------------------------------------------------
 
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
@@ -62,19 +64,9 @@ function startGameHandler(e){
     }
 }
 
-function collisionDetection() {
-    for(let c=0; c<brickColumnCount; c++) {
-        for(let r=0; r<brickRowCount; r++) {
-            let b = bricks[c][r];
-            if(x > b.x - ballRadius && x < b.x+brickWidth + ballRadius && y > b.y - ballRadius
-                && y < b.y+brickHeight + ballRadius && b.status !== 0) {
-                bdy = -bdy;
-                b.status = 0;
-                score++;
-            }
-        }
-    }
-}
+//-------------------------------------------------
+//OBJECT GENERATION
+//-------------------------------------------------
 
 function GenerateBricks(){
     for(let c=0; c<brickColumnCount; c++) {
@@ -84,6 +76,10 @@ function GenerateBricks(){
         }
     }
 }
+
+//-------------------------------------------------
+//ANIMATIONS
+//-------------------------------------------------
 
 function setCanvas(){
     context.fillStyle = "#d2f7ef";
@@ -112,31 +108,15 @@ function drawPaddle(){
     context.closePath();
 }
 
-function checkIfGameOver(){
-    let found = false;
-    for(let c=0; c<brickColumnCount; c++) {
-        for(let r=0; r<brickRowCount; r++) {
-            let b = bricks[c][r];
-            if (b.status === 1){
-                found = true;
-            }
-            }
-        }
-    if (found === false){
-        gameOver = true;
-    }
-    return found;
-}
-
 function drawBricks() {
     let count = 0;
-    for(let c=0; c<brickColumnCount; c++) {
-        for(let r=0; r<brickRowCount; r++) {
-            if (bricks[c][r].status === 1) {
-                let brickX = (c * (brickWidth + brickPadding)) + brickOffsetLeft;
-                let brickY = (r * (brickHeight + brickPadding)) + brickOffsetTop;
-                bricks[c][r].x = brickX;
-                bricks[c][r].y = brickY;
+    for(let i=0; i<brickColumnCount; i++) {
+        for(let j=0; j<brickRowCount; j++) {
+            if (bricks[i][j].status === 1) {
+                let brickX = (i * (brickWidth + brickPadding)) + brickOffsetLeft;
+                let brickY = (j * (brickHeight + brickPadding)) + brickOffsetTop;
+                bricks[i][j].x = brickX;
+                bricks[i][j].y = brickY;
                 context.beginPath();
                 context.rect(brickX, brickY, brickWidth, brickHeight);
                 context.fillStyle = "#e84a4a";
@@ -144,17 +124,6 @@ function drawBricks() {
                 context.closePath();
                 count++;
             }
-        }
-    }
-}
-
-function gameEnd(){
-    clearInterval(interval);
-    if (session === '1'){
-        let confirmation = confirm("Submit score?");
-        if (confirmation === true){
-            document.getElementById("score").value = score;
-            document.getElementById("scoreForm").submit();
         }
     }
 }
@@ -212,8 +181,6 @@ function draw(){
             PreGame();
         }
     }
-
-
     if(rightPressed) {
         paddleX += pdx;
         if (paddleX + paddleWidth > canvas.width){
@@ -231,8 +198,6 @@ function draw(){
     y+=bdy;
 }
 
-let interval;
-
 function drawPlayButton(){
     context.beginPath();
     context.font = '15px Courier New';
@@ -242,12 +207,55 @@ function drawPlayButton(){
 
 }
 
+//-------------------------------------------------
+//LOGIC
+//-------------------------------------------------
+
+function collisionDetection() {
+    for(let c=0; c<brickColumnCount; c++) {
+        for(let r=0; r<brickRowCount; r++) {
+            let b = bricks[c][r];
+            if(x > b.x - ballRadius && x < b.x+brickWidth + ballRadius && y > b.y - ballRadius
+                && y < b.y+brickHeight + ballRadius && b.status !== 0) {
+                bdy = -bdy;
+                b.status = 0;
+                score++;
+            }
+        }
+    }
+}
+
+function checkIfGameOver(){
+    let found = false;
+    for(let c=0; c<brickColumnCount; c++) {
+        for(let r=0; r<brickRowCount; r++) {
+            let b = bricks[c][r];
+            if (b.status === 1){
+                found = true;
+            }
+        }
+    }
+    if (found === false){
+        gameOver = true;
+    }
+    return found;
+}
+
+function gameEnd(){
+    clearInterval(interval);
+    if (session === '1'){
+        let confirmation = confirm("Submit score?");
+        if (confirmation === true){
+            document.getElementById("score").value = score;
+            document.getElementById("scoreForm").submit();
+        }
+    }
+}
 function PreGame(){
     document.addEventListener('keydown', startGameHandler, false)
     setCanvas();
     drawPlayButton();
 }
-
 
 function startGame(){
     document.removeEventListener('keydown', startGameHandler, false);
