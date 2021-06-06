@@ -58,20 +58,18 @@ class userController extends Controller
 
     public function login(Request $request)
     {
-        $ElPastas = $request->input("email");
-        $Slaptazodis = $request->input("password");
-
-        print("Pateko1");
+        $Email = $request->input("email");
+        $PassWord = $request->input("password");
 
         $data = Users::all()
-            ->where("email",$ElPastas)
+            ->where("email",$Email)
             ->first();
 
         if($data != null) {
-            $gautas = $data->password;
+            $RecievedPassword = $data->password;
 
 
-            if (Hash::check($Slaptazodis, $gautas)) {
+            if (Hash::check($PassWord, $RecievedPassword)) {
                 session(['id'=>$data->id_USERS]);
                 session(['admin'=>$data->isAdmin]);
 
