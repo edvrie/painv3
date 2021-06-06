@@ -5,8 +5,8 @@
     <div class="mt-3">
         <table class="table table-striped table-bordered table-hover table-sm">
             <tr>
-                <th class="Centered HeaderColor"><h3>Name</h3></th>
-                <th class="Centered HeaderColor"><h3>Description</h3></th>
+                <th class="Centered HeaderColor">Name</th>
+                <th class="Centered HeaderColor">Description</th>
                 <th class="Centered HeaderColor"></th>
             </tr>
             @foreach($data as $duomenys)

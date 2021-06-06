@@ -29,7 +29,7 @@
                     <th colspan="2"><p class="text-danger">{{ $errors->first('password') }}</p></th>
                 </tr>
             </table>
-            <br><th colspan="2" align="center"><button type="submit" name="button">Register</button></th><br>&nbsp
+            <br><button type="submit" name="button">Register</button><br>&nbsp;
         </form>
     </div>
 

@@ -10,7 +10,7 @@
             <button class="card bg-warning" onclick="location.href='{{url('gameView/pong')}}'">
                 <p class="card-body text-center card-text">Pong</p>
             </button>
-            <button class="card bg-success" onclick="location.href='{{url('gameView/clicker')}}'">
+            <button class="card bg-success text-center card-text" onclick="location.href='{{url('gameView/clicker')}}'">
                 <p class="card-body text-center card-text">Clicker</p>
             </button>
             <button class="card bg-danger" onclick="location.href='{{url('gameView/jumper')}}'">

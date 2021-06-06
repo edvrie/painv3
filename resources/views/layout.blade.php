@@ -24,10 +24,10 @@
         <ul class="navbar-nav mr-auto">
 
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Game Categories
                 </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <div class="dropdown-menu">
                     <a class="dropdown-item" href="#">Arcade</a>
                     <a class="dropdown-item" href="#">Single player</a>
                     <a class="dropdown-item" href="#">Multiplayer</a>
@@ -35,10 +35,10 @@
             </li>
             @if (session()->get('admin') == 1)
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Admin Functions
                 </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <div class="dropdown-menu">
                     <a class="dropdown-item" href="{{ url('/deleteUser') }}">Delete Users</a>
                     <a class="dropdown-item" href="{{ url('/deleteReview') }}">Delete Reviews</a>
                     <a class="dropdown-item" href="{{ url('/deleteScore') }}">Delete Scores</a>
