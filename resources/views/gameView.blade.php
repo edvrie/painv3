@@ -4,9 +4,9 @@
 @section('content')
 
     <script>
-        let myCoolCode = document.createElement("script");
-        myCoolCode.setAttribute("src", "{{ $data -> script }}");
-        document.body.appendChild(myCoolCode);
+        let script = document.createElement("script");
+        script.setAttribute("src", "{{ $data -> script }}");
+        document.body.appendChild(script);
         let session = '<?php echo session()->has('id') ?>';
     </script>
     <form action="{{ url('postScore') }}" method="post" id="scoreForm">
@@ -19,7 +19,6 @@
             <canvas id="gameCanvas1" style="width: 100%; text-align: center; display: inline; border: solid #1a202c 5px; margin-top: 5px">
             </canvas>
         </div>
-
         <div class="row" style="margin-top: 10px">
             <div class="col-6" style="background-color: #F6F6F6; border-radius: 5px; border-style: solid; border-radius: 20px; border-color: #CECECE">
                 About the game:
@@ -69,16 +68,10 @@
             <div style="background-color: #F6F6F6; border-radius: 5px; border-style: solid; border-radius: 20px; border-color: #CECECE" class="col-sm">
                 Leaderboard:
                 <table style="background-color: #F6F6F6; border-radius: 5px" class="table table-hover table-sm">
-{{--                    <tr>--}}
-{{--                        <th><h3>Username</h3></th>--}}
-{{--                        <th><h3>Score</h3></th>--}}
-{{--                        <th><h3>Date</h3></th>--}}
-{{--                    </tr>--}}
                     @foreach($scores as $score)
                         <tr>
                             <td>{{ $score -> userName }}</td>
                             <td>{{ $score -> score }}</td>
-{{--                            <td>{{ $score -> date }}</td>--}}
                         </tr>
                     @endforeach
                 </table>
@@ -86,15 +79,9 @@
             <div style="background-color: #F6F6F6; border-radius: 5px; border-style: solid; border-radius: 20px; border-color: #CECECE"  class="col-sm">
                 Comments:
                 <table style="background-color: #F6F6F6; border-radius: 5px" class="table table-hover table-sm">
-{{--                    <tr>--}}
-{{--                        <th><h3>Username</h3></th>--}}
-{{--                        <th><h3>Rating</h3></th>--}}
-{{--                        <th><h3>Comment</h3></th>--}}
-{{--                    </tr>--}}
                     @foreach($comments as $comment)
                         <tr>
                             <td>{{ $comment -> userName }}</td>
-{{--                            <td>{{ $comment -> rating }}</td>--}}
                             <td>{{ $comment -> description }}</td>
                         </tr>
                     @endforeach
