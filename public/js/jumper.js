@@ -46,6 +46,9 @@ let timer = 60;
 
 let score;
 
+//----------------------------------
+//INPUTS
+//----------------------------------
 
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
@@ -97,128 +100,9 @@ function keyUpHandler(e) {
     }
 }
 
-function timeouts(){
-    setTimeout(function(){
-        clearInterval(animationUpInterval);
-        animationDownInterval = setInterval(moveDown, gameTimer);
-    }, firstAnimationTimer);
-    setTimeout(function(){
-        clearInterval(animationDownInterval);
-        checkIfJumpedToEmpty();
-        endGameScreen();
-        firstLevelY = 0;
-        secondLevelY = gridY;
-        thirdLevelY = gridY*2;
-        fourthLevelY = gridY*3;
-        document.addEventListener("keydown", keyDownHandler, false);
-    }, secondAnimationTimer);
-}
-
-function moveObjectLeft() {
-    document.removeEventListener("keydown", keyDownHandler, false);
-    switch (objectPos.currentPlatform) {
-        case 1:
-            gameOver();
-            tempPosX = gridOffsetX + objectOffsetToCenter - gridX;
-            animationUpInterval = setInterval(moveAnimationLeft, gameTimer);
-            timeouts();
-            break;
-        case 2:
-            tempPosX = gridOffsetX + objectOffsetToCenter;
-            animationUpInterval = setInterval(moveAnimationLeft, gameTimer);
-            timeouts();
-            objectPos.currentPlatform = 1;
-            break;
-        case 3:
-            tempPosX = gridOffsetX + gridX + objectOffsetToCenter;
-            animationUpInterval = setInterval(moveAnimationLeft, gameTimer);
-            timeouts();
-
-            objectPos.currentPlatform = 2;
-            break;
-    }
-
-}
-
-
-function moveObjectRight(){
-    document.removeEventListener("keydown", keyDownHandler, false);
-    switch (objectPos.currentPlatform){
-        case 1:
-            tempPosX = gridOffsetX + gridX + objectOffsetToCenter;
-            //clearInterval(animationUpInterval);
-            animationUpInterval = setInterval(moveAnimationRight, gameTimer);
-            timeouts();
-            objectPos.currentPlatform = 2;
-            break;
-        case 2:
-            tempPosX = gridOffsetX + gridX*2 + objectOffsetToCenter;
-            animationUpInterval = setInterval(moveAnimationRight, gameTimer);
-            timeouts();
-            objectPos.currentPlatform = 3;
-            break;
-        case 3:
-            gameOver();
-            tempPosX = gridOffsetX + gridX*3 + objectOffsetToCenter;
-            animationUpInterval = setInterval(moveAnimationRight, gameTimer);
-            timeouts();
-    }
-
-}
-
-function moveObjectUp(){
-    document.removeEventListener("keydown", keyDownHandler, false);
-    animationUpInterval = setInterval(moveAnimationUp, 10);
-    timeouts();
-    checkIfJumpedToEmpty();
-}
-
-function moveAnimationUp(){
-    innitDraw();
-    if (objectPos.y > canvas.height - platformHeight - gridY - objectSize){
-        objectPos.y -= ody;
-    }
-}
-
-function moveAnimationLeft(){
-    innitDraw();
-    if (objectPos.x > tempPosX){
-        objectPos.x -= odx;
-        if (objectPos.y > canvas.height - platformHeight - gridY - objectSize){
-            objectPos.y -= ody;
-        }
-    }
-}
-
-function moveDown(){
-    innitDraw();
-    if (objectPos.y < canvas.height - platformHeight - objectSize){
-        objectPos.y += pdy;
-        if (secondLevelY < canvas.height - platformHeight){
-            firstLevelY -= pdy;
-            secondLevelY -= pdy;
-            thirdLevelY -= pdy;
-            fourthLevelY -= pdy;
-        }
-
-    }
-}
-
-function moveAnimationRight(){
-    innitDraw();
-    if (objectPos.x < tempPosX){
-        objectPos.x += odx;
-        if (objectPos.y > canvas.height - platformHeight - gridY - objectSize){
-            objectPos.y -= ody;
-        }
-        else{
-            clearInterval(animationUpInterval);
-            animationDownInterval = setInterval(moveDown, 10);
-        }
-    }
-}
-
-
+//----------------------------------
+//ANIMATIONS
+//----------------------------------
 
 function setCanvas(){
     context.fillStyle = "#82dae8";
@@ -271,14 +155,140 @@ function drawInnitPlatforms(){
     context.closePath();
 }
 
-
-
 function innitDraw(){
     context.clearRect(0, 0, canvas.width, canvas.height);
     setCanvas();
     drawInnitPlatforms();
     drawObject();
     drawScore();
+}
+
+function moveAnimationUp(){
+    innitDraw();
+    if (objectPos.y > canvas.height - platformHeight - gridY - objectSize){
+        objectPos.y -= ody;
+    }
+}
+
+function moveAnimationLeft(){
+    innitDraw();
+    if (objectPos.x > tempPosX){
+        objectPos.x -= odx;
+        if (objectPos.y > canvas.height - platformHeight - gridY - objectSize){
+            objectPos.y -= ody;
+        }
+    }
+}
+
+function moveDown(){
+    innitDraw();
+    if (objectPos.y < canvas.height - platformHeight - objectSize){
+        objectPos.y += pdy;
+        if (secondLevelY < canvas.height - platformHeight){
+            firstLevelY -= pdy;
+            secondLevelY -= pdy;
+            thirdLevelY -= pdy;
+            fourthLevelY -= pdy;
+        }
+    }
+}
+
+function moveAnimationRight(){
+    innitDraw();
+    if (objectPos.x < tempPosX){
+        objectPos.x += odx;
+        if (objectPos.y > canvas.height - platformHeight - gridY - objectSize){
+            objectPos.y -= ody;
+        }
+        else{
+            clearInterval(animationUpInterval);
+            animationDownInterval = setInterval(moveDown, 10);
+        }
+    }
+}
+
+function drawScore(){
+    context.beginPath();
+    context.font = '10px Courier New';
+    context.fillText("Score: " + score, 0, 20);
+    context.closePath();
+}
+
+//----------------------------------
+//LOGIC
+//----------------------------------
+
+function timeouts(){
+    setTimeout(function(){
+        clearInterval(animationUpInterval);
+        animationDownInterval = setInterval(moveDown, gameTimer);
+    }, firstAnimationTimer);
+    setTimeout(function(){
+        clearInterval(animationDownInterval);
+        checkIfJumpedToEmpty();
+        endGameScreen();
+        firstLevelY = 0;
+        secondLevelY = gridY;
+        thirdLevelY = gridY*2;
+        fourthLevelY = gridY*3;
+        document.addEventListener("keydown", keyDownHandler, false);
+    }, secondAnimationTimer);
+}
+
+function moveObjectLeft() {
+    document.removeEventListener("keydown", keyDownHandler, false);
+    switch (objectPos.currentPlatform) {
+        case 1:
+            gameOver();
+            tempPosX = gridOffsetX + objectOffsetToCenter - gridX;
+            animationUpInterval = setInterval(moveAnimationLeft, gameTimer);
+            timeouts();
+            break;
+        case 2:
+            tempPosX = gridOffsetX + objectOffsetToCenter;
+            animationUpInterval = setInterval(moveAnimationLeft, gameTimer);
+            timeouts();
+            objectPos.currentPlatform = 1;
+            break;
+        case 3:
+            tempPosX = gridOffsetX + gridX + objectOffsetToCenter;
+            animationUpInterval = setInterval(moveAnimationLeft, gameTimer);
+            timeouts();
+
+            objectPos.currentPlatform = 2;
+            break;
+    }
+}
+
+function moveObjectRight(){
+    document.removeEventListener("keydown", keyDownHandler, false);
+    switch (objectPos.currentPlatform){
+        case 1:
+            tempPosX = gridOffsetX + gridX + objectOffsetToCenter;
+            //clearInterval(animationUpInterval);
+            animationUpInterval = setInterval(moveAnimationRight, gameTimer);
+            timeouts();
+            objectPos.currentPlatform = 2;
+            break;
+        case 2:
+            tempPosX = gridOffsetX + gridX*2 + objectOffsetToCenter;
+            animationUpInterval = setInterval(moveAnimationRight, gameTimer);
+            timeouts();
+            objectPos.currentPlatform = 3;
+            break;
+        case 3:
+            gameOver();
+            tempPosX = gridOffsetX + gridX*3 + objectOffsetToCenter;
+            animationUpInterval = setInterval(moveAnimationRight, gameTimer);
+            timeouts();
+    }
+}
+
+function moveObjectUp(){
+    document.removeEventListener("keydown", keyDownHandler, false);
+    animationUpInterval = setInterval(moveAnimationUp, 10);
+    timeouts();
+    checkIfJumpedToEmpty();
 }
 
 function generatePlatforms(){
@@ -331,13 +341,6 @@ function endGameScreen(){
     }
 }
 
-function drawScore(){
-    context.beginPath();
-    context.font = '10px Courier New';
-    context.fillText("Score: " + score, 0, 20);
-    context.closePath();
-}
-
 function preGame(){
     context.clearRect(0, 0, canvas.width, canvas.height);
     setCanvas();
@@ -353,7 +356,6 @@ function preGame(){
 function tickDownTimer(){
     timer -= 1;
 }
-
 
 function startGame(){
     gameStarted = true;
