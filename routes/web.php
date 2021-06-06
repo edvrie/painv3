@@ -31,6 +31,7 @@ Route::get('login', [\App\Http\Controllers\userController::class, 'loginload']);
 Route::get('register', [\App\Http\Controllers\userController::class, 'registerload']);
 Route::get('logout', [\App\Http\Controllers\userController::class, 'logout']);
 Route::get('settings', [\App\Http\Controllers\userController::class, 'settingsLoad']);
+Route::get('changeDescription', [\App\Http\Controllers\gameController::class, 'changeGameDescriptionLoad']);
 Route::post('loginconfirm', [\App\Http\Controllers\userController::class, 'login']);
 Route::post('naujasVartotojas', [\App\Http\Controllers\userController::class, 'registerNew']);
 Route::post('changeSettings', [\App\Http\Controllers\userController::class, 'changeSettings']);
@@ -42,3 +43,4 @@ Route::post('deleteSelectedScore', [\App\Http\Controllers\scoreController::class
 Route::post('leaveReview', [\App\Http\Controllers\reviewController::class, 'leaveUserReview']);
 
 Route::post('postScore', [\App\Http\Controllers\scoreController::class, 'postScore']);
+Route::post('changeDescriptionSubmit', [\App\Http\Controllers\gameController::class, 'changeGameDescription']);

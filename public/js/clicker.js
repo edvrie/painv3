@@ -156,7 +156,7 @@ function drawScore(){
 }
 
 function gameOver(){
-    if (clicks === 1000000){
+    if (clicks >= 1000000){
         clearInterval(autoClicksInt);
         clearInterval(interval);
         alert("You Win!");
